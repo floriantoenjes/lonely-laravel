@@ -2,12 +2,12 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Company Overview
+                Company Overview for {{ fromBackend }}
             </h2>
         </template>
 
-        <div class="lg:flex flex-row">
-            <div class="m-12 mr-0 p-12 bg-white rounded">
+        <div class="xl:flex flex-row">
+            <div class="m-12 xl:mr-0 p-12 bg-white rounded">
                 <h2 class="text-xl text-center">Our Company</h2>
                 <p class="my-12">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
@@ -53,7 +53,11 @@
                         <jet-button :type="'button'">Back to Dashboard</jet-button>
                     </div>
 
-                    <div @click="alertMe">
+                    <div @click="sendPostRequest" class="mr-6">
+                        <jet-button :type="'button'">Send Post Request</jet-button>
+                    </div>
+
+                    <div @click="alertMe" class="ml-auto"  v-if="backendData">
                         <jet-button :type="'button'">Alert me!</jet-button>
                     </div>
                 </div>
@@ -98,6 +102,11 @@ export default {
         AppLayout,
         JetButton
     },
+    data() {
+        return {
+            backendData: ''
+        }
+    },
     methods: {
         alertMe() {
             console.log('Oh Junge!')
@@ -105,8 +114,19 @@ export default {
         },
         cancel() {
             this.$inertia.get('/dashboard')
+        },
+        sendPostRequest() {
+            axios.post('/company', { myName: 'Florian'}).then(
+                response => {
+                    console.log(response)
+                    this.backendData = response.data
+                }
+            )
         }
-    }
+    },
+    props: [
+        'fromBackend'
+    ]
 }
 </script>
 

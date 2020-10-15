@@ -22,5 +22,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/company', function () {
-    return Inertia\Inertia::render('Company');
+    return Inertia\Inertia::render('Company', [
+        'fromBackend' => 'Backend data'
+    ]);
 })->name('company');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Illuminate\Http\Request $request) {
+    return response()->json([
+        'name' => $request->json()->get('myName')
+    ]);
+});
