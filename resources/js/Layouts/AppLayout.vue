@@ -207,6 +207,15 @@
             <slot></slot>
         </main>
 
+        <!-- Page Footer -->
+        <footer class="bg-white shadow fixed bottom">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 mx-auto flex flex-row justify-between w-1/4">
+                <a href="#">Contact</a>
+                <a href="#">About us</a>
+                <a href="#">Signature</a>
+            </div>
+        </footer>
+
         <!-- Modal Portal -->
         <portal-target name="modal" multiple>
         </portal-target>
