@@ -7,7 +7,7 @@
         </template>
 
         <div class="xl:flex flex-row">
-            <div class="m-12 xl:mr-0 pt-12 bg-white rounded">
+            <div class="m-12 xl:mr-0 p-12 bg-white rounded">
                 <h2 class="text-xl text-center">Our Company</h2>
                 <p class="my-12">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
                     invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
