@@ -1,6 +1,6 @@
 <template>
-    <div class="min-h-screen bg-gray-100">
-        <div style="min-height: 90vh">
+    <div class="min-h-screen bg-gray-100 flex flex-col">
+        <div>
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -211,7 +211,7 @@
         </div>
 
         <!-- Page Footer -->
-        <footer class="bg-white mt-12 shadow w-full flex" style="height: 10vh">
+        <footer class="bg-white mt-auto shadow w-full flex">
             <div class="max-w-7xl m-auto py-6 px-4 sm:px-6 lg:px-8 mx-auto flex flex-row justify-between items-center lg:w-2/4 xl:w-1/4">
                 <a href="#">Contact</a>
                 <a href="#">About us</a>
