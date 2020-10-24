@@ -33,6 +33,6 @@ class MessageReceived implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('messages');
+        return new Channel('messages');
     }
 }
