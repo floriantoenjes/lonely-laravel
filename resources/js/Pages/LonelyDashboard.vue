@@ -46,14 +46,19 @@
 
                     <button type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
-                            :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">Show me lonely
-                        people!
+                            :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">I am lonely today!
                     </button>
                 </form>
             </div>
 
             <div class="m-4 p-16 w-3/4 h-auto bg-white">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci delectus est ex iure molestiae obcaecati optio quibusdam repellendus velit. Aliquam cumque esse eveniet, ipsa odit repudiandae ut! Architecto, voluptatum!</p>
+                <p v-if="!lonely">Are you lonely  today? Mark yourself as lonely!</p>
+                <div v-else>
+                    <h2 class="text-2xl mb-8">Lonely People:</h2>
+                    <ul class="list-disc list-inside">
+                        <li v-for="lonelyPerson in lonelyPersons">{{ lonelyPerson.name }}</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -76,11 +81,16 @@ export default {
         JetInput
     },
     props: {
-        'userLonelySettings': {
+        'lonely': {
 
+        },
+        'userLonelySettings': {
         },
         'success': {
             default: true
+        },
+        'lonelyPersons': {
+
         }
     },
     data() {

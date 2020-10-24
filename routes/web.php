@@ -41,9 +41,33 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Ill
 Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', function () {
     $userLonelySettings = Auth::user()->userLonelySetting()->first();
 
+    $lonely = false;
+    if ($userLonelySettings !== null) {
+        $userLonelySinceDateTime = new DateTime($userLonelySettings->lonely_since);
+        $userLonelySinceDateTime->setTime(0, 0);
+
+        $now = new DateTime();
+        $now->setTime(0, 0);
+
+        $lonely = ($now->getTimestamp() === $userLonelySinceDateTime->getTimestamp());
+    }
+
+    $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
+    $lonelyPersonIds = [];
+    foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
+        if ($lonelyPersonSetting->user_id === $userLonelySettings->user_id) {
+            continue;
+        }
+        $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
+    }
+
+    $lonelyPersons = User::whereIn('id', $lonelyPersonIds)->get();
+
     return Inertia\Inertia::render('LonelyDashboard', [
         'userLonelySettings' => $userLonelySettings,
-        'success' => true
+        'success' => true,
+        'lonely' => $lonely,
+        'lonelyPersons' => $lonelyPersons
     ]);
 })->name('lonely-dashboard');
 
@@ -54,7 +78,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', funct
         return Redirect::route('lonely-dashboard');
     }
 
-//    $lonelySetting = new UserLonelySetting();
     $lonelySetting = Auth::user()->userLonelySetting()->firstOr(['*'], function () {
         return new UserLonelySetting();
     });
@@ -73,10 +96,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', funct
 
     $lonelySetting->user_id = Auth::user()->id;
     $lonelySetting->save();
-
-//    $currentUser = User::find();
-//    $currentUser->user_lonely_setting_id = $lonelySetting->id;
-//    $currentUser->save();
 
     return Redirect::route('lonely-dashboard');
 });
