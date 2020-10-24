@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\UserLonelySetting;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +41,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', functi
     return Inertia\Inertia::render('LonelyDashboard');
 })->name('lonely-dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function () {
-    return Inertia\Inertia::render('LonelyDashboard');
-})->name('lonely-dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function (\Illuminate\Http\Request $request) {
+    $lonelySetting = new UserLonelySetting();
+//    $lonelySetting->latitu
+
+    return Redirect::route('lonely-dashboard');
+});
