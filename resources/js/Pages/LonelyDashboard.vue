@@ -6,25 +6,26 @@
             </h2>
         </template>
 
-        <jet-form-section @submitted="updateLonelySettings">
-            <template #title>
-                Your Lonely Settings
-            </template>
+        <div class="m-4 p-16 w-1/4 h-full bg-white">
+            <form class="flex flex-col" @submit="updateLonelySettings">
+                <div class="mb-4">
+                    <label for="city" class="block mr-4 mb-4">City:</label>
+                    <input id="city" class="border rounded" type="text" placeholder=" City">
+                </div>
 
-            <template #description>
-                Set up your settings.
-            </template>
+                <div class="mb-4">
+                    <label for="postcode" class="block mr-4">Postcode:</label>
+                    <input id="postcode" class="border rounded" type="text" placeholder=" Postcode">
+                </div>
 
-            <template #form>
-                <jet-input id="name" type="text" v-model="form.name">
+                <div class="mb-4">
+                    <label for="radius" class="block mr-4">Radius:</label>
+                    <input id="radius" class="border rounded" type="text" placeholder=" Radius">
+                </div>
 
-                </jet-input>
-            </template>
-
-            <template #actions>
-                <jet-button>Save</jet-button>
-            </template>
-        </jet-form-section>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8">Show me lonly people!</button>
+            </form>
+        </div>
 
     </app-layout>
 </template>
@@ -34,9 +35,11 @@ import AppLayout from "../Layouts/AppLayout";
 import JetButton from '../Jetstream/Button';
 import JetFormSection from '../Jetstream/FormSection';
 import JetInput from '../Jetstream/Input';
+import Input from "../Jetstream/Input";
 export default {
     name: "LonelyDashboard",
     components: {
+        Input,
         AppLayout,
         JetButton,
         JetFormSection,
