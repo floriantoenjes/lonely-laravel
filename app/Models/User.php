@@ -19,6 +19,11 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    public function userLonelySetting()
+    {
+        return $this->hasOne('App\Models\UserLonelySetting');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
