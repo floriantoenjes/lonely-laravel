@@ -28,6 +28,8 @@ class CreateUserLonelySettingsTable extends Migration
             $table->integer('radius');
             $table->integer('meet_up_age_from');
             $table->integer('meet_up_age_to');
+
+            $table->foreignId('user_id');
         });
     }
 

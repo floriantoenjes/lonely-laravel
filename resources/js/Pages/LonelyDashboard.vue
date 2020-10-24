@@ -60,15 +60,20 @@ export default {
         JetFormSection,
         JetInput
     },
+    props: [
+        'userLonelySettings'
+    ],
     data() {
         return {
             form: this.$inertia.form({
-                city: null,
-                postcode: null,
-                address: null,
-                radius: null,
-                ageFrom: null,
-                ageTo: null
+                city: this.userLonelySettings?.city,
+                postcode: this.userLonelySettings?.postcode,
+                address: this.userLonelySettings?.address,
+                radius: this.userLonelySettings?.radius,
+                ageFrom: this.userLonelySettings?.meet_up_age_from,
+                ageTo: this.userLonelySettings?.meet_up_age_to
+            }, {
+                resetOnSuccess: false
             })
         }
     },

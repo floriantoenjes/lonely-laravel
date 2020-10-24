@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\UserLonelySetting;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -32,13 +33,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/company', function () {
 Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Illuminate\Http\Request $request) {
     $userNames = array_map(function ($user) {
         return $user['name'];
-    }, \App\Models\User::all()->toArray());
+    }, User::all()->toArray());
     return $userNames;
 });
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', function () {
-    return Inertia\Inertia::render('LonelyDashboard');
+    $userLonelySettings = Auth::user()->userLonelySetting()->first();
+
+    return Inertia\Inertia::render('LonelyDashboard', [
+        'userLonelySettings' => $userLonelySettings
+    ]);
 })->name('lonely-dashboard');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function (\Illuminate\Http\Request $request) {
@@ -48,7 +53,10 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', funct
         return Redirect::route('lonely-dashboard');
     }
 
-    $lonelySetting = new UserLonelySetting();
+//    $lonelySetting = new UserLonelySetting();
+    $lonelySetting = Auth::user()->userLonelySetting()->firstOr(['*'], function () {
+        return new UserLonelySetting();
+    });
 
     $lonelySetting->latitude = $coordinates['latitude'];
     $lonelySetting->longitude = $coordinates['longitude'];
@@ -60,22 +68,34 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', funct
 
     $lonelySetting->radius = $request->input('radius');
     $lonelySetting->meet_up_age_from = $request->input('ageFrom');
-    $lonelySetting->meet_up_age_from = $request->input('ageTo');
+    $lonelySetting->meet_up_age_to = $request->input('ageTo');
+
+    $lonelySetting->user_id = Auth::user()->id;
+    $lonelySetting->save();
+
+//    $currentUser = User::find();
+//    $currentUser->user_lonely_setting_id = $lonelySetting->id;
+//    $currentUser->save();
 
     return Redirect::route('lonely-dashboard');
 });
 
 function getCoordinatesFromAddress(string $address) {
-    $prepAddr = str_replace(' ','+',$address);
-    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
-    $output = json_decode($geocode);
-
-    if ($output->error_message) {
-        return false;
-    }
+//    $prepAddr = str_replace(' ','+',$address);
+//    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
+//    $output = json_decode($geocode);
+//
+//    if ($output->error_message) {
+//        return false;
+//    }
+//
+//    return [
+//        'latitude' => $output->results[0]->geometry->location->lat,
+//        'longitude' => $output->results[0]->geometry->location->lng
+//    ];
 
     return [
-        'latitude' => $output->results[0]->geometry->location->lat,
-        'longitude' => $output->results[0]->geometry->location->lng
+        'latitude' => '53.044941',
+        'longitude' => '8.517674'
     ];
 }
