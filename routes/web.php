@@ -43,7 +43,9 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', functi
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function (\Illuminate\Http\Request $request) {
     $lonelySetting = new UserLonelySetting();
-//    $lonelySetting->latitu
+
+    $lonelySetting->city = $request->input('city');
+    $lonelySetting->lonely_since = date('c');
 
     return Redirect::route('lonely-dashboard');
 });
