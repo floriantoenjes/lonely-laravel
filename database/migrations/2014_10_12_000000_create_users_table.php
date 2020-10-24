@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('birthdate');
             $table->string('description')->nullable();
 
-            $table->foreignId('user_lonely_setting_id');
+            $table->foreignId('user_lonely_setting_id')->nullable();
         });
     }
 

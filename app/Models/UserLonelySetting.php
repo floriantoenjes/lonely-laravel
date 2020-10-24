@@ -26,6 +26,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereLongitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $radius
+ * @property int $meet_up_age_from
+ * @property int $meet_up_age_to
+ * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereMeetUpAgeFrom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereMeetUpAgeTo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereRadius($value)
+ * @property int $postcode
+ * @property string $address
+ * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting wherePostcode($value)
  */
 class UserLonelySetting extends Model
 {

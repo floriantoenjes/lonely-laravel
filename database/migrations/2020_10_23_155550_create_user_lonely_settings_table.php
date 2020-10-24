@@ -20,7 +20,10 @@ class CreateUserLonelySettingsTable extends Migration
             $table->string('latitude');
             $table->string('longitude');
             $table->string('city');
-            $table->timestamp('lonely_since')->nullable();
+            $table->integer('postcode');
+            $table->string('address');
+
+            $table->timestamp('lonely_since');
 
             $table->integer('radius');
             $table->integer('meet_up_age_from');

@@ -65,6 +65,7 @@ export default {
             form: this.$inertia.form({
                 city: null,
                 postcode: null,
+                address: null,
                 radius: null,
                 ageFrom: null,
                 ageTo: null
