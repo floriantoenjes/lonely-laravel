@@ -46,17 +46,21 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', functi
         $lonely = isLonelyToday($currentUserLonelySettings);
     }
 
-    $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
+    if ($lonely === true) {
+        $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
 
-    $lonelyPersonIds = [];
-    foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
-        if ($lonelyPersonSetting->user_id === $currentUserLonelySettings->user_id) {
-            continue;
+        $lonelyPersonIds = [];
+        foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
+            if ($lonelyPersonSetting->user_id === $currentUserLonelySettings->user_id) {
+                continue;
+            }
+            $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
         }
-        $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
-    }
 
-    $lonelyPersons = User::whereIn('id', $lonelyPersonIds)->get();
+        $lonelyPersons = User::whereIn('id', $lonelyPersonIds)->get();
+    } else {
+        $lonelyPersons = [];
+    }
 
     return Inertia\Inertia::render('LonelyDashboard', [
         'userLonelySettings' => $currentUserLonelySettings,
@@ -74,6 +78,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', functi
  */
 function isLonelyToday($userLonelySettings): bool
 {
+    if ($userLonelySettings->lonely_since === null) {
+        return false;
+    }
+
     $userLonelySinceDateTime = new DateTime($userLonelySettings->lonely_since);
     $userLonelySinceDateTime->setTime(0, 0);
 
@@ -98,7 +106,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', funct
     return Redirect::route('lonely-dashboard');
 });
 
-
 function getCoordinatesFromAddress(string $address) {
 //    $prepAddr = str_replace(' ','+',$address);
 //    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
@@ -118,7 +125,6 @@ function getCoordinatesFromAddress(string $address) {
         'longitude' => '8.517674'
     ];
 }
-
 
 /**
  * @param array $coordinates
@@ -145,3 +151,16 @@ function createOrUpdateLonelySetting(array $coordinates, \Illuminate\Http\Reques
     $lonelySetting->user_id = Auth::user()->id;
     $lonelySetting->save();
 }
+
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', function (\Illuminate\Http\Request $request) {
+    $lonelySetting = Auth::user()->userLonelySetting()->first();
+
+    if ($lonelySetting !== null) {
+        $lonelySetting->lonely_since = null;
+        $lonelySetting->save();
+    }
+
+    return Redirect::route('lonely-dashboard');
+})->name('lonely-no-more');
+

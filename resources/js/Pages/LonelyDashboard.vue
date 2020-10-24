@@ -115,7 +115,11 @@ export default {
     methods: {
         updateLonelySettings() {
             this.success = false;
-            this.form.post(route('lonely-dashboard', this.form));
+            if (!this.lonely) {
+                this.form.post(route('lonely-dashboard', this.form));
+            } else if (this.lonely) {
+                this.form.post(route('lonely-no-more'));
+            }
         }
     }
 }
