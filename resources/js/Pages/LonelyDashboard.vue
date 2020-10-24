@@ -44,9 +44,14 @@
                                v-model="form.ageTo">
                     </div>
 
-                    <button type="submit"
+                    <button v-if="!lonely" type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
                             :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">I am lonely today!
+                    </button>
+
+                    <button v-else-if="lonely" type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
+                            :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">I am not lonely anymore!
                     </button>
                 </form>
             </div>
