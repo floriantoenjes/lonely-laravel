@@ -161,6 +161,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
         $lonelySetting->save();
     }
 
+    event(new App\Events\MessageReceived());
+
     return Redirect::route('lonely-dashboard');
 })->name('lonely-no-more');
 

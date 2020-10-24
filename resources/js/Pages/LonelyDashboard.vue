@@ -112,6 +112,11 @@ export default {
             })
         }
     },
+    mounted() {
+        Echo.channel('messages').listen('MessageReceived', (e) => {
+            console.log(e.messages);
+        });
+    },
     methods: {
         updateLonelySettings() {
             this.success = false;
