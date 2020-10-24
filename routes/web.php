@@ -42,7 +42,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', functi
     $userLonelySettings = Auth::user()->userLonelySetting()->first();
 
     return Inertia\Inertia::render('LonelyDashboard', [
-        'userLonelySettings' => $userLonelySettings
+        'userLonelySettings' => $userLonelySettings,
+        'success' => true
     ]);
 })->name('lonely-dashboard');
 
