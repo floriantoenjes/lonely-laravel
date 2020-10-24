@@ -33,5 +33,24 @@ class DatabaseSeeder extends Seeder
             'personal_team' => true,
 
         ]);
+
+
+        $username = 'michalis';
+
+        $userId = DB::table('users')->insertGetId([
+            'name' => $username,
+            'email' => 'test2@email.com',
+            'email_verified_at' => date('c'),
+            'password' => bcrypt('P@ssw0rd'),
+            'sex' => 'male',
+            'birthdate' => date('c'),
+        ]);
+
+        DB::table('teams')->insert([
+            'user_id' => $userId,
+            'name' => explode(' ', $username, 2)[0]."'s Team",
+            'personal_team' => true,
+
+        ]);
     }
 }
