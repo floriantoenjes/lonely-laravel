@@ -21,6 +21,9 @@
                                 <jet-nav-link :href="route('company')" :active="$page.currentRouteName == 'company'">
                                     Company
                                 </jet-nav-link>
+                                <jet-nav-link :href="route('lonely-dashboard')" :active="$page.currentRouteName == 'lonely-dashboard'">
+                                    Lonely Dashboard
+                                </jet-nav-link>
                             </div>
                         </div>
 

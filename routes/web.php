@@ -28,12 +28,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/company', function () {
 })->name('company');
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Illuminate\Http\Request $request) {
-//    return response()->json([
-//        'name' => $request->json()->get('myName')
-//    ]);
-
     $userNames = array_map(function ($user) {
         return $user['name'];
     }, \App\Models\User::all()->toArray());
     return $userNames;
 });
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', function () {
+    return Inertia\Inertia::render('LonelyDashboard');
+})->name('lonely-dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function () {
+    return Inertia\Inertia::render('LonelyDashboard');
+})->name('lonely-dashboard');
