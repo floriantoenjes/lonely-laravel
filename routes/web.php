@@ -171,8 +171,14 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function 
         return Redirect::route('lonely-dashboard');
     }
 
-    $chatMessages = ChatMessage::where('sender_id', '=', Auth::user()->id)
-        ->orWhere('receiver_id', '=', Auth::user()->id)
+    $chatMessages = ChatMessage::where([
+        ['sender_id', '=', Auth::user()->id],
+        ['receiver_id', '=', $userId]
+    ])
+        ->orWhere([
+            ['receiver_id', '=', Auth::user()->id],
+            ['sender_id', '=', $userId]
+        ])
         ->get();
 
     return Inertia\Inertia::render('Chat', [
