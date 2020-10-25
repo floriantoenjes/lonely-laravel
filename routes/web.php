@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Models\ChatMessage;
 use App\Models\User;
 use App\Models\UserLonelySetting;
@@ -166,42 +167,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
 })->name('lonely-no-more');
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function ($userId) {
-    if ((int) $userId === Auth::user()->getAuthIdentifier()) {
-        return Redirect::route('lonely-dashboard');
-    }
+Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
 
-    $chatMessages = ChatMessage::where([
-        ['sender_id', '=', Auth::user()->id],
-        ['receiver_id', '=', $userId]
-    ])
-        ->orWhere([
-            ['receiver_id', '=', Auth::user()->id],
-            ['sender_id', '=', $userId]
-        ])
-        ->get();
-
-    return Inertia\Inertia::render('Chat', [
-        'userId' => $userId,
-        'currentUser' => Auth::user(),
-        'receiver' => User::find($userId),
-        'chatMessages' => $chatMessages
-    ]);
-})->name('chat');
-
-
-Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{userId}', function ( \Illuminate\Http\Request $request, $userId) {
-    $chatMessage = new ChatMessage();
-    $chatMessage->sender_id = Auth::user()->id;
-    $chatMessage->receiver_id = $userId;
-    $chatMessage->chat_message = $request->input('chatMessageInput');
-
-    $chatMessage->save();
-
-    event(new App\Events\MessageReceived($chatMessage));
-
-    return Redirect::route('chat', [
-        'userId' => $userId
-    ]);
-
-})->name('send-chat-message');
+Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
