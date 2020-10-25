@@ -167,7 +167,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
 })->name('lonely-no-more');
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/chat', function () {
+Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function ($userId) {
     return Inertia\Inertia::render('Chat', [
+        'userId' => $userId
     ]);
 })->name('chat');

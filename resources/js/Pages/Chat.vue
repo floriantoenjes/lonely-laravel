@@ -14,7 +14,7 @@
         </div>
 
         <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4">
-            <input id="chatInput" type="text" class="border rounded w-full" placeholder=" Your message goes here..."
+            <input id="chatInput" type="text" class="border rounded w-full px-4" placeholder=" Your message goes here..."
                    v-model="chatMessageInput">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
         </form>
@@ -29,7 +29,9 @@ export default {
     name: "Chat",
     components: {AppLayout, Label},
     props: {
-
+        'userId': {
+            type: String
+        }
     },
     data() {
         return {
@@ -43,7 +45,7 @@ export default {
     },
     methods: {
         sendChatMessage() {
-            alert(this.chatMessageInput);
+            this.chatMessages.push(this.chatMessageInput);
         }
     }
 }
