@@ -183,6 +183,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function 
     ]);
 })->name('chat');
 
+
 Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{userId}', function ( \Illuminate\Http\Request $request, $userId) {
     $chatMessage = new ChatMessage();
     $chatMessage->sender_id = Auth::user()->id;
