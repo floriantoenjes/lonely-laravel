@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ChatMessage;
 use App\Models\User;
 use App\Models\UserLonelySetting;
 use Illuminate\Support\Facades\Redirect;
@@ -171,4 +172,14 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function 
     return Inertia\Inertia::render('Chat', [
         'userId' => $userId
     ]);
+})->name('chat');
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{userId}', function ( \Illuminate\Http\Request $request, $userId) {
+    $chatMessage = new ChatMessage();
+    $chatMessage->sender_id = Auth::user()->id;
+    $chatMessage->receiver_id = $userId;
+    $chatMessage->chat_message = $request->input('chatMessage');
+
+    $chatMessage->save();
+
 })->name('chat');

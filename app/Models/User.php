@@ -60,6 +60,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin \Eloquent
  * @property int $user_lonely_setting_id
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUserLonelySettingId($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ChatMessage[] $messagesReceived
+ * @property-read int|null $messages_received_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ChatMessage[] $messagesSent
+ * @property-read int|null $messages_sent_count
  */
 class User extends Authenticatable
 {
@@ -73,6 +77,14 @@ class User extends Authenticatable
     public function userLonelySetting()
     {
         return $this->hasOne('App\Models\UserLonelySetting');
+    }
+
+    public function messagesSent() {
+        return $this->hasMany('App\Models\ChatMessage');
+    }
+
+    public function messagesReceived() {
+        return $this->hasMany('App\Models\ChatMessage');
     }
 
     /**

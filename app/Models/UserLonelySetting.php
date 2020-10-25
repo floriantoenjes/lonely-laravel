@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting wherePostcode($value)
  * @property int $user_id
  * @method static \Illuminate\Database\Eloquent\Builder|UserLonelySetting whereUserId($value)
+ * @property-read \App\Models\User $user
  */
 class UserLonelySetting extends Model
 {
