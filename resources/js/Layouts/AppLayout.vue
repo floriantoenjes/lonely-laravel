@@ -15,12 +15,12 @@
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('dashboard')" :active="$page.currentRouteName == 'dashboard'">
-                                    Dashboard
-                                </jet-nav-link>
-                                <jet-nav-link :href="route('company')" :active="$page.currentRouteName == 'company'">
-                                    Company
-                                </jet-nav-link>
+<!--                                <jet-nav-link :href="route('dashboard')" :active="$page.currentRouteName == 'dashboard'">-->
+<!--                                    Dashboard-->
+<!--                                </jet-nav-link>-->
+<!--                                <jet-nav-link :href="route('company')" :active="$page.currentRouteName == 'company'">-->
+<!--                                    Company-->
+<!--                                </jet-nav-link>-->
                                 <jet-nav-link :href="route('lonely-dashboard')" :active="$page.currentRouteName == 'lonely-dashboard'">
                                     Lonely Dashboard
                                 </jet-nav-link>

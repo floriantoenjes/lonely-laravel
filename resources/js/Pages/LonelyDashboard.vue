@@ -59,7 +59,8 @@
             <div class="m-4 p-16 w-3/4 h-auto bg-white">
                 <p v-if="!lonely">Are you lonely  today? Mark yourself as lonely!</p>
                 <div v-else>
-                    <h2 class="text-2xl mb-8">Lonely People:</h2>
+                    <h2 class="text-2xl mb-8" v-if="lonelyPersons.length > 0">Lonely People:</h2>
+                    <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
                     <ul class="list-disc list-inside">
                         <li v-for="lonelyPerson in lonelyPersons">
                             <inertia-link class="text-blue-500 hover:text-black" :href="route('chat', lonelyPerson.id)">{{ lonelyPerson.name }}</inertia-link>

@@ -11,8 +11,8 @@
                 <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
                     <div class="flex flex-row">
                         <div style="min-width: 5em; max-width: 5em">
-                            <img class="h-16 rounded block mb-4 mr-4" v-if="chatMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
-                            <img class="h-16 rounded block mb-4 mr-4" v-else :src="receiver.profile_photo_url">
+                            <img class="h-16 rounded block mb-4 block m-auto" v-if="chatMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
+                            <img class="h-16 rounded block mb-4 block m-auto" v-else :src="receiver.profile_photo_url">
                         </div>
                         <div class="flex flex-col mb-4">
                             <div class="flex flex-row">
@@ -61,7 +61,6 @@ export default {
     },
     mounted() {
         Echo.channel('messages').listen('MessageReceived', (e) => {
-            console.log(e.message);
             this.chatMessages.push(e.message);
             this.scrollToLastMessage();
         });
