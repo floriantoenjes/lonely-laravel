@@ -56,7 +56,11 @@ export default {
     },
     methods: {
         sendChatMessage() {
-            this.form.post(route('send-chat-message', { userId: this.userId }, this.form));
+            this.form.post(route('send-chat-message', { userId: this.userId }, this.form), {
+                onSuccess: () => {
+                    this.scrollToLastMessage();
+                }
+            });
         },
         scrollToLastMessage() {
             const messagesDivs = this.$el.getElementsByClassName('messages-div');
