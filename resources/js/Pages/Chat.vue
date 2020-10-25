@@ -63,6 +63,7 @@ export default {
         Echo.channel('messages').listen('MessageReceived', (e) => {
             console.log(e.message);
             this.chatMessages.push(e.message);
+            this.scrollToLastMessage();
         });
         this.scrollToLastMessage();
     },
