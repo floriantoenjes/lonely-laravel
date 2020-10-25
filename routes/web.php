@@ -169,6 +169,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function ($userId) {
+//    $chatMessages =
+
     return Inertia\Inertia::render('Chat', [
         'userId' => $userId
     ]);
@@ -178,8 +180,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{userId}', function
     $chatMessage = new ChatMessage();
     $chatMessage->sender_id = Auth::user()->id;
     $chatMessage->receiver_id = $userId;
-    $chatMessage->chat_message = $request->input('chatMessage');
+    $chatMessage->chat_message = $request->input('chatMessageInput');
 
     $chatMessage->save();
 
-})->name('chat');
+})->name('send-chat-message');
