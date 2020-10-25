@@ -6,18 +6,22 @@
             </h2>
         </template>
 
-        <div class="bg-white m-4 p-16">
-            <div v-for="chatMessage in chatMessages" class="flex flex-row mb-4 overflow-scroll">
-                <p class="mr-4">{{ chatMessage.sender_id }}: </p>
-                <p>{{ chatMessage.chat_message }}</p>
+        <div class="flex flex-col">
+            <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
+                <div v-for="chatMessage in chatMessages" class="messages-div flex flex-row mb-4 overflow-scroll">
+                    <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id">{{ currentUser.name }}: </p>
+                    <p class="mr-4" v-else>{{ receiver.name }}: </p>
+                    <p>{{ chatMessage.chat_message }}</p>
+                </div>
             </div>
-        </div>
 
-        <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4">
-            <input id="chatInput" type="text" class="border rounded w-full px-4" placeholder=" Your message goes here..."
-                   v-model="form.chatMessageInput">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
-        </form>
+            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4">
+                <input id="chatInput" type="text" class="border rounded w-full px-4"
+                       placeholder=" Your message goes here..."
+                       v-model="form.chatMessageInput">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
+            </form>
+        </div>
     </app-layout>
 </template>
 
@@ -43,9 +47,18 @@ export default {
             }),
         }
     },
+    mounted() {
+        Echo.channel('messages').listen('MessageReceived', (e) => {
+            console.log(e.message);
+            this.chatMessages.push(e.message);
+            const el = this.$el.getElementsByClassName('messages-div')[0];
+            el.scrollIntoView();
+        });
+    },
     methods: {
         sendChatMessage() {
             this.form.post(route('send-chat-message', { userId: this.userId }, this.form));
+            const el = this.$el.getElementsByClassName('messages-div')[0];
         }
     }
 }

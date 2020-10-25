@@ -162,17 +162,18 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
         $lonelySetting->save();
     }
 
-    event(new App\Events\MessageReceived());
-
     return Redirect::route('lonely-dashboard');
 })->name('lonely-no-more');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function ($userId) {
-    $chatMessages = ChatMessage::where([
-        ['sender_id', '=', Auth::user()->id],
-        ['receiver_id', '=', $userId],
-    ])->get();
+    if ((int) $userId === Auth::user()->getAuthIdentifier()) {
+        return Redirect::route('lonely-dashboard');
+    }
+
+    $chatMessages = ChatMessage::where('sender_id', '=', Auth::user()->id)
+        ->orWhere('receiver_id', '=', Auth::user()->id)
+        ->get();
 
     return Inertia\Inertia::render('Chat', [
         'userId' => $userId,
@@ -189,5 +190,11 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/chat/{userId}', function
     $chatMessage->chat_message = $request->input('chatMessageInput');
 
     $chatMessage->save();
+
+    event(new App\Events\MessageReceived($chatMessage));
+
+    return Redirect::route('chat', [
+        'userId' => $userId
+    ]);
 
 })->name('send-chat-message');

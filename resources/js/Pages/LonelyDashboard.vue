@@ -109,10 +109,6 @@ export default {
         }
     },
     mounted() {
-        Echo.channel('messages').listen('MessageReceived', (e) => {
-            alert(e.messages);
-        });
-
         Inertia.on('start', event => {
             this.loading = true;
         });
