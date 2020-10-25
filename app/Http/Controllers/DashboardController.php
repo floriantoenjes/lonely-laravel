@@ -55,6 +55,20 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function setLonelySettings(Request $request)
+    {
+        $address = $request->input('address') . ' ' . $request->input('city') . ' ' . $request->input('postcode');
+
+        $coordinates = $this->getCoordinatesFromAddress($address);
+        if ($coordinates === false) {
+            return Redirect::route('lonely-dashboard');
+        }
+
+        $this->createOrUpdateLonelySetting($coordinates, $request);
+
+        return Redirect::route('lonely-dashboard');
+    }
+
     public function notLonelyAnymore()
     {
         $lonelySetting = Auth::user()->userLonelySetting()->first();
@@ -88,4 +102,49 @@ class DashboardController extends Controller
         return $lonely;
     }
 
+    function getCoordinatesFromAddress(string $address) {
+//    $prepAddr = str_replace(' ','+',$address);
+//    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
+//    $output = json_decode($geocode);
+//
+//    if ($output->error_message) {
+//        return false;
+//    }
+//
+//    return [
+//        'latitude' => $output->results[0]->geometry->location->lat,
+//        'longitude' => $output->results[0]->geometry->location->lng
+//    ];
+
+        return [
+            'latitude' => '53.044941',
+            'longitude' => '8.517674'
+        ];
+    }
+
+    /**
+     * @param array $coordinates
+     * @param \Illuminate\Http\Request $request
+     */
+    function createOrUpdateLonelySetting(array $coordinates, \Illuminate\Http\Request $request): void
+    {
+        $lonelySetting = Auth::user()->userLonelySetting()->firstOr(['*'], function () {
+            return new UserLonelySetting();
+        });
+
+        $lonelySetting->latitude = $coordinates['latitude'];
+        $lonelySetting->longitude = $coordinates['longitude'];
+        $lonelySetting->city = $request->input('city');
+        $lonelySetting->postcode = $request->input('postcode');
+        $lonelySetting->address = $request->input('address');
+
+        $lonelySetting->lonely_since = date('c');
+
+        $lonelySetting->radius = $request->input('radius');
+        $lonelySetting->meet_up_age_from = $request->input('ageFrom');
+        $lonelySetting->meet_up_age_to = $request->input('ageTo');
+
+        $lonelySetting->user_id = Auth::user()->id;
+        $lonelySetting->save();
+    }
 }

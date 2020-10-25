@@ -2,9 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
-use App\Models\ChatMessage;
 use App\Models\User;
-use App\Models\UserLonelySetting;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -40,73 +38,9 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Ill
     return $userNames;
 });
 
-
 Route::get('/lonely-dashboard', [DashboardController::class, 'lonelyDashBoard'])->name('lonely-dashboard');
-
-
-Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function (\Illuminate\Http\Request $request) {
-    $address = $request->input('address') . ' ' . $request->input('city') . ' ' . $request->input('postcode');
-
-    $coordinates = getCoordinatesFromAddress($address);
-    if ($coordinates === false) {
-        return Redirect::route('lonely-dashboard');
-    }
-
-    createOrUpdateLonelySetting($coordinates, $request);
-
-    return Redirect::route('lonely-dashboard');
-});
-
-function getCoordinatesFromAddress(string $address) {
-//    $prepAddr = str_replace(' ','+',$address);
-//    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
-//    $output = json_decode($geocode);
-//
-//    if ($output->error_message) {
-//        return false;
-//    }
-//
-//    return [
-//        'latitude' => $output->results[0]->geometry->location->lat,
-//        'longitude' => $output->results[0]->geometry->location->lng
-//    ];
-
-    return [
-        'latitude' => '53.044941',
-        'longitude' => '8.517674'
-    ];
-}
-
-/**
- * @param array $coordinates
- * @param \Illuminate\Http\Request $request
- */
-function createOrUpdateLonelySetting(array $coordinates, \Illuminate\Http\Request $request): void
-{
-    $lonelySetting = Auth::user()->userLonelySetting()->firstOr(['*'], function () {
-        return new UserLonelySetting();
-    });
-
-    $lonelySetting->latitude = $coordinates['latitude'];
-    $lonelySetting->longitude = $coordinates['longitude'];
-    $lonelySetting->city = $request->input('city');
-    $lonelySetting->postcode = $request->input('postcode');
-    $lonelySetting->address = $request->input('address');
-
-    $lonelySetting->lonely_since = date('c');
-
-    $lonelySetting->radius = $request->input('radius');
-    $lonelySetting->meet_up_age_from = $request->input('ageFrom');
-    $lonelySetting->meet_up_age_to = $request->input('ageTo');
-
-    $lonelySetting->user_id = Auth::user()->id;
-    $lonelySetting->save();
-}
-
-
+Route::post('/lonely-dashboard', [DashboardController::class, 'setLonelySettings']);
 Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])->name('lonely-no-more');
 
-
 Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
-
 Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
