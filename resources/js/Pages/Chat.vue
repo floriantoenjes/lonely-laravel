@@ -8,14 +8,16 @@
 
         <div class="flex flex-col">
             <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
-                <div v-for="chatMessage in chatMessages" class="messages-div flex flex-row mb-4 overflow-scroll">
-                    <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id">{{ currentUser.name }}: </p>
-                    <p class="mr-4" v-else>{{ receiver.name }}: </p>
+                <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
+                    <div class="flex flex-row mb-4">
+                        <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span class="font-bold text-lg">You</span> {{ formatDateFromMessage(chatMessage) }}: </p>
+                        <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span> {{ formatDateFromMessage(chatMessage) }}: </p>
+                    </div>
                     <p>{{ chatMessage.chat_message }}</p>
                 </div>
             </div>
 
-            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4">
+            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
                        v-model="form.chatMessageInput">
@@ -66,6 +68,12 @@ export default {
             const messagesDivs = this.$el.getElementsByClassName('messages-div');
             const el = messagesDivs[messagesDivs.length - 1];
             el.scrollIntoView();
+        },
+        formatDateFromMessage(message) {
+            let [date, time] = message.created_at.split('T');
+            date = date.substr(0, 10);
+            time = time.substr(0, 8);
+            return time;
         }
     }
 }

@@ -61,7 +61,9 @@
                 <div v-else>
                     <h2 class="text-2xl mb-8">Lonely People:</h2>
                     <ul class="list-disc list-inside">
-                        <li v-for="lonelyPerson in lonelyPersons">{{ lonelyPerson.name }}</li>
+                        <li v-for="lonelyPerson in lonelyPersons">
+                            <inertia-link class="text-blue-500 hover:text-black" :href="route('chat', lonelyPerson.id)">{{ lonelyPerson.name }}</inertia-link>
+                        </li>
                     </ul>
                 </div>
             </div>
