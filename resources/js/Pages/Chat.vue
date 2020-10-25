@@ -30,7 +30,8 @@
             <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
-                       v-model="form.chatMessageInput">
+                       v-model="form.chatMessageInput"
+                       autocomplete="off">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
             </form>
         </div>
