@@ -51,14 +51,17 @@ export default {
         Echo.channel('messages').listen('MessageReceived', (e) => {
             console.log(e.message);
             this.chatMessages.push(e.message);
-            const el = this.$el.getElementsByClassName('messages-div')[0];
-            el.scrollIntoView();
         });
+        this.scrollToLastMessage();
     },
     methods: {
         sendChatMessage() {
             this.form.post(route('send-chat-message', { userId: this.userId }, this.form));
-            const el = this.$el.getElementsByClassName('messages-div')[0];
+        },
+        scrollToLastMessage() {
+            const messagesDivs = this.$el.getElementsByClassName('messages-div');
+            const el = messagesDivs[messagesDivs.length - 1];
+            el.scrollIntoView();
         }
     }
 }
