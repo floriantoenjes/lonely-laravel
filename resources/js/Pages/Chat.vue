@@ -9,11 +9,21 @@
         <div class="flex flex-col">
             <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
                 <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
-                    <div class="flex flex-row mb-4">
-                        <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span class="font-bold text-lg">You</span> {{ formatDateFromMessage(chatMessage) }}: </p>
-                        <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span> {{ formatDateFromMessage(chatMessage) }}: </p>
+                    <div class="flex flex-row">
+                        <div style="min-width: 5em; max-width: 5em">
+                            <img class="h-16 rounded block mb-4 mr-4" v-if="chatMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
+                            <img class="h-16 rounded block mb-4 mr-4" v-else :src="receiver.profile_photo_url">
+                        </div>
+                        <div class="flex flex-col mb-4">
+                            <div class="flex flex-row">
+                                <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span
+                                    class="font-bold text-lg">You</span> {{ formatDateFromMessage(chatMessage) }}: </p>
+                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span>
+                                    {{ formatDateFromMessage(chatMessage) }}: </p>
+                            </div>
+                            <p>{{ chatMessage.chat_message }}</p>
+                        </div>
                     </div>
-                    <p>{{ chatMessage.chat_message }}</p>
                 </div>
             </div>
 
