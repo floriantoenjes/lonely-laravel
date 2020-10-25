@@ -169,10 +169,16 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/chat/{userId}', function ($userId) {
-//    $chatMessages =
+    $chatMessages = ChatMessage::where([
+        ['sender_id', '=', Auth::user()->id],
+        ['receiver_id', '=', $userId],
+    ])->get();
 
     return Inertia\Inertia::render('Chat', [
-        'userId' => $userId
+        'userId' => $userId,
+        'currentUser' => Auth::user(),
+        'receiver' => User::find($userId),
+        'chatMessages' => $chatMessages
     ]);
 })->name('chat');
 

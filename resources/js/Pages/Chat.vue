@@ -8,8 +8,8 @@
 
         <div class="bg-white m-4 p-16">
             <div v-for="chatMessage in chatMessages" class="flex flex-row mb-4 overflow-scroll">
-                <p class="mr-4">Florian: </p>
-                <p>{{ chatMessage }}</p>
+                <p class="mr-4">{{ chatMessage.sender_id }}: </p>
+                <p>{{ chatMessage.chat_message }}</p>
             </div>
         </div>
 
@@ -31,18 +31,16 @@ export default {
     props: {
         'userId': {
             type: String
-        }
+        },
+        'currentUser': {},
+        'receiver': {},
+        'chatMessages': {}
     },
     data() {
         return {
             form: this.$inertia.form({
                 chatMessageInput: ''
             }),
-            chatMessages: [
-                'I\'m baby hexagon flexitarian enamel pin chartreuse semiotics pork belly mustache kickstarter meh cred direct trade adaptogen trust fund tattooed. Ugh yuccie roof party, bushwick microdosing wolf lyft green juice master cleanse farm-to-table asymmetrical salvia lumbersexual franzen direct trade. Swag DIY master cleanse cray yr intelligentsia edison bulb. ',
-                'Austin kale chips jean shorts tilde tote bag direct trade chambray jianbing sustainable 3 wolf moon gastropub mixtape wolf ',
-                'Prism small batch microdosing wolf fanny pack. Squid subway tile jean shorts try-hard humblebrag fixie meggings pinterest hoodie leggings, paleo godard. Ethical cray migas chicharrones, celiac freegan lyft pinterest chia. Lyft shabby chic lumbersexual, schlitz biodiesel leggings roof party meggings subway tile selvage ramps butcher chicharrones.'
-            ]
         }
     },
     methods: {
