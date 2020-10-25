@@ -57,7 +57,7 @@
             </div>
 
             <div class="m-4 p-16 w-3/4 h-auto bg-white map" :style="lonely ? 'background-image: url(img/maps_placeholder.png)' : ''">
-                <p v-if="!lonely">Are you lonely  today? Mark yourself as lonely!</p>
+                <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: 18%">Are you lonely  today? Mark yourself as lonely!</p>
                 <div v-else>
                     <h2 class="text-2xl mb-8" v-if="lonelyPersons.length > 0">Lonely People:</h2>
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
