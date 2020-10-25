@@ -65,6 +65,8 @@
                     </ul>
                 </div>
             </div>
+
+            <chat></chat>
         </div>
 
     </app-layout>
@@ -77,12 +79,14 @@ import JetFormSection from '../Jetstream/FormSection';
 import JetInput from '../Jetstream/Input';
 import Input from "../Jetstream/Input";
 import { Inertia } from '@inertiajs/inertia';
+import Chat from './Chat';
 
 export default {
     name: "LonelyDashboard",
     components: {
         Input,
         AppLayout,
+        Chat,
         JetButton,
         JetFormSection,
         JetInput
