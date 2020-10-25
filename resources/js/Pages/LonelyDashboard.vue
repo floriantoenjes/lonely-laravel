@@ -46,12 +46,12 @@
 
                     <button v-if="!lonely" type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
-                            :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">I am lonely today!
+                            :disabled="loading" :class="{ 'opacity-50 cursor-not-allowed': loading }">I am lonely today!
                     </button>
 
                     <button v-else-if="lonely" type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
-                            :disabled="!success" :class="{ 'opacity-50 cursor-not-allowed': !success }">I am not lonely anymore!
+                            :disabled="loading" :class="{ 'opacity-50 cursor-not-allowed': loading }">I am not lonely anymore!
                     </button>
                 </form>
             </div>
@@ -76,6 +76,8 @@ import JetButton from '../Jetstream/Button';
 import JetFormSection from '../Jetstream/FormSection';
 import JetInput from '../Jetstream/Input';
 import Input from "../Jetstream/Input";
+import { Inertia } from '@inertiajs/inertia';
+
 export default {
     name: "LonelyDashboard",
     components: {
@@ -86,17 +88,9 @@ export default {
         JetInput
     },
     props: {
-        'lonely': {
-
-        },
-        'userLonelySettings': {
-        },
-        'success': {
-            default: true
-        },
-        'lonelyPersons': {
-
-        }
+        'lonely': {},
+        'userLonelySettings': {},
+        'lonelyPersons': {}
     },
     data() {
         return {
@@ -109,17 +103,25 @@ export default {
                 ageTo: this.userLonelySettings?.meet_up_age_to
             }, {
                 resetOnSuccess: false
-            })
+            }),
+            loading: false
         }
     },
     mounted() {
         Echo.channel('messages').listen('MessageReceived', (e) => {
-            console.log(e.messages);
+            alert(e.messages);
+        });
+
+        Inertia.on('start', event => {
+            this.loading = true;
+        });
+
+        Inertia.on('finish', event => {
+            this.loading = false;
         });
     },
     methods: {
         updateLonelySettings() {
-            this.success = false;
             if (!this.lonely) {
                 this.form.post(route('lonely-dashboard', this.form));
             } else if (this.lonely) {
