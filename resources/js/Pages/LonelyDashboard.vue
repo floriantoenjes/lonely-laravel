@@ -56,7 +56,7 @@
                 </form>
             </div>
 
-            <div class="m-4 p-16 w-3/4 h-auto bg-white">
+            <div class="m-4 p-16 w-3/4 h-auto bg-white map" :style="lonely ? 'background-image: url(img/maps_placeholder.png)' : ''">
                 <p v-if="!lonely">Are you lonely  today? Mark yourself as lonely!</p>
                 <div v-else>
                     <h2 class="text-2xl mb-8" v-if="lonelyPersons.length > 0">Lonely People:</h2>
