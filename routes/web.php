@@ -166,3 +166,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', functio
     return Redirect::route('lonely-dashboard');
 })->name('lonely-no-more');
 
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/chat', function () {
+    return Inertia\Inertia::render('Chat', [
+    ]);
+})->name('chat');
