@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\DashboardController;
 use App\Models\ChatMessage;
 use App\Models\User;
 use App\Models\UserLonelySetting;
@@ -40,59 +41,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Ill
 });
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/lonely-dashboard', function () {
-    $currentUserLonelySettings = Auth::user()->userLonelySetting()->first();
-
-    $lonely = false;
-    if ($currentUserLonelySettings !== null) {
-        $lonely = isLonelyToday($currentUserLonelySettings);
-    }
-
-    if ($lonely === true) {
-        $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
-
-        $lonelyPersonIds = [];
-        foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
-            if ($lonelyPersonSetting->user_id === $currentUserLonelySettings->user_id) {
-                continue;
-            }
-            $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
-        }
-
-        $lonelyPersons = User::whereIn('id', $lonelyPersonIds)->get();
-    } else {
-        $lonelyPersons = [];
-    }
-
-    return Inertia\Inertia::render('LonelyDashboard', [
-        'userLonelySettings' => $currentUserLonelySettings,
-        'success' => true,
-        'lonely' => $lonely,
-        'lonelyPersons' => $lonelyPersons
-    ]);
-})->name('lonely-dashboard');
-
-
-/**
- * @param $userLonelySettings
- * @return bool
- * @throws Exception
- */
-function isLonelyToday($userLonelySettings): bool
-{
-    if ($userLonelySettings->lonely_since === null) {
-        return false;
-    }
-
-    $userLonelySinceDateTime = new DateTime($userLonelySettings->lonely_since);
-    $userLonelySinceDateTime->setTime(0, 0);
-
-    $now = new DateTime();
-    $now->setTime(0, 0);
-
-    $lonely = ($now->getTimestamp() === $userLonelySinceDateTime->getTimestamp());
-    return $lonely;
-}
+Route::get('/lonely-dashboard', [DashboardController::class, 'lonelyDashBoard'])->name('lonely-dashboard');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-dashboard', function (\Illuminate\Http\Request $request) {
@@ -155,16 +104,7 @@ function createOrUpdateLonelySetting(array $coordinates, \Illuminate\Http\Reques
 }
 
 
-Route::middleware(['auth:sanctum', 'verified'])->post('/lonely-no-more', function (\Illuminate\Http\Request $request) {
-    $lonelySetting = Auth::user()->userLonelySetting()->first();
-
-    if ($lonelySetting !== null) {
-        $lonelySetting->lonely_since = null;
-        $lonelySetting->save();
-    }
-
-    return Redirect::route('lonely-dashboard');
-})->name('lonely-no-more');
+Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])->name('lonely-no-more');
 
 
 Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
