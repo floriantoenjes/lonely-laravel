@@ -26,7 +26,6 @@ class CreateActivitiesTable extends Migration
             $table->integer('postcode');
             $table->string('address');
 
-            $table->timestamp('date');
             $table->foreignId('creator_id');
         });
     }
