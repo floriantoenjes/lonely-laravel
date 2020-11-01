@@ -25,18 +25,18 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/company', function () {
-    return Inertia\Inertia::render('Company', [
-        'fromBackend' => 'Backend data'
-    ]);
-})->name('company');
-
-Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Illuminate\Http\Request $request) {
-    $userNames = array_map(function ($user) {
-        return $user['name'];
-    }, User::all()->toArray());
-    return $userNames;
-});
+//Route::middleware(['auth:sanctum', 'verified'])->get('/company', function () {
+//    return Inertia\Inertia::render('Company', [
+//        'fromBackend' => 'Backend data'
+//    ]);
+//})->name('company');
+//
+//Route::middleware(['auth:sanctum', 'verified'])->post('/company', function (\Illuminate\Http\Request $request) {
+//    $userNames = array_map(function ($user) {
+//        return $user['name'];
+//    }, User::all()->toArray());
+//    return $userNames;
+//});
 
 Route::get('/lonely-dashboard', [DashboardController::class, 'lonelyDashBoard'])->name('lonely-dashboard');
 Route::post('/lonely-dashboard', [DashboardController::class, 'setLonelySettings']);
