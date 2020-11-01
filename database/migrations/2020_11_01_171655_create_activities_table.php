@@ -17,6 +17,9 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->timestamps();
 
+            $table->string('name');
+            $table->string('description');
+
             $table->string('latitude');
             $table->string('longitude');
             $table->string('city');

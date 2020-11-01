@@ -45,6 +45,5 @@ Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])
 Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
 Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/activity/new', function () {
-    return Inertia\Inertia::render('ActivityForm');
-})->name('activity-form');
+Route::get('/activity/new', [\App\Http\Controllers\ActivityController::class, 'newActivity'])->name('new-activity-form');
+Route::post('/activity/new', [\App\Http\Controllers\ActivityController::class, 'newActivity'])->name('create-activity');
