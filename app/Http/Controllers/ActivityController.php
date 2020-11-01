@@ -20,7 +20,9 @@ class ActivityController extends Controller
 
     public function newActivity()
     {
-        return Inertia::render('ActivityForm');
+        return Inertia::render('ActivityForm', [
+            'activities' => Activity::get()
+        ]);
     }
 
     public function createActivity(Request $request)
