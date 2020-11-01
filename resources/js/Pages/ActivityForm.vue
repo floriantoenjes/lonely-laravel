@@ -1,10 +1,10 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="text-xl">Create a new activity</h2>
+            <h2 class="text-xl">Create a New Activity</h2>
         </template>
 
-        <form class="m-4 flex flex-col w-1/4" @submit.prevent="createActivity">
+        <form class="m-4 p-16 flex flex-col w-1/4 bg-white" @submit.prevent="createActivity">
             <div class="mb-4">
                 <label for="name" class="block mr-4 mb-4">Activity Name:</label>
                 <input id="name" class="border rounded w-full" type="text" placeholder=" Name" v-model="form.name">
@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         createActivity() {
-            console.log('Activity created', this.form);
+            this.form.post(route('create-activity'), this.form);
         }
     }
 }

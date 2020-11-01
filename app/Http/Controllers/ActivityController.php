@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ActivityController extends Controller
@@ -37,11 +38,13 @@ class ActivityController extends Controller
         $activity->postcode = $request->input('postcode');
         $activity->address = $request->input('address');
 
-        $activity->latitude = $coordinates[0];
-        $activity->longitude = $coordinates[1];
+        $activity->latitude = $coordinates['latitude'];
+        $activity->longitude = $coordinates['longitude'];
 
         $activity->creator_id = Auth::user()->id;
         $activity->save();
+
+        return Redirect::route('lonely-dashboard');
     }
 
 }

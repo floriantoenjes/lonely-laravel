@@ -46,4 +46,4 @@ Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('cha
 Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
 
 Route::get('/activity/new', [\App\Http\Controllers\ActivityController::class, 'newActivity'])->name('new-activity-form');
-Route::post('/activity/new', [\App\Http\Controllers\ActivityController::class, 'newActivity'])->name('create-activity');
+Route::post('/activity/new', [\App\Http\Controllers\ActivityController::class, 'createActivity'])->name('create-activity');
