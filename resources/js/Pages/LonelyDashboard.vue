@@ -71,6 +71,10 @@
 
         </div>
 
+        <div class="flex flex-col mx-4">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8 self-start">Create an activity!</button>
+        </div>
+
     </app-layout>
 </template>
 
@@ -81,10 +85,12 @@ import JetFormSection from '../Jetstream/FormSection';
 import JetInput from '../Jetstream/Input';
 import Input from "../Jetstream/Input";
 import { Inertia } from '@inertiajs/inertia';
+import Button from "../Jetstream/Button";
 
 export default {
     name: "LonelyDashboard",
     components: {
+        Button,
         Input,
         AppLayout,
         JetButton,
