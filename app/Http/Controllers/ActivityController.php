@@ -49,4 +49,10 @@ class ActivityController extends Controller
         return Redirect::route('lonely-dashboard');
     }
 
+    public function joinActivity($activityId)
+    {
+        $activity = Activity::find($activityId);
+        $activity->users()->save(Auth::user());
+    }
+
 }

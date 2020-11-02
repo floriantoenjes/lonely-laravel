@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\DashboardController;
-use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -45,5 +45,6 @@ Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])
 Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
 Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
 
-Route::get('/activity/new', [\App\Http\Controllers\ActivityController::class, 'newActivity'])->name('new-activity-form');
-Route::post('/activity/new', [\App\Http\Controllers\ActivityController::class, 'createActivity'])->name('create-activity');
+Route::get('/activity/new', [ActivityController::class, 'newActivity'])->name('new-activity-form');
+Route::post('/activity/new', [ActivityController::class, 'createActivity'])->name('create-activity');
+Route::post('/activity/{activityId}/join', [ActivityController::class, 'joinActivity'])->name('join-activity');

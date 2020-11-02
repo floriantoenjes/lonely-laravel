@@ -64,6 +64,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $messages_received_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ChatMessage[] $messagesSent
  * @property-read int|null $messages_sent_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Activity[] $joinedActivities
+ * @property-read int|null $joined_activities_count
  */
 class User extends Authenticatable
 {
@@ -85,6 +87,10 @@ class User extends Authenticatable
 
     public function messagesReceived() {
         return $this->hasMany('App\Models\ChatMessage');
+    }
+
+    public function joinedActivities() {
+        return $this->belongsToMany('App\Models\Activity');
     }
 
     /**

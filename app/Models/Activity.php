@@ -36,8 +36,15 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Activity wherePostcode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
  */
 class Activity extends Model
 {
     use HasFactory;
+
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User')->withTimestamps();
+    }
 }
