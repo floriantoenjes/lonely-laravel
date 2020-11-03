@@ -74,7 +74,7 @@ class ActivityController extends Controller
 
     public function activityDetail($activityId)
     {
-        $activity = Activity::with('activityMessages', 'activityMessages.sender')->find($activityId);
+        $activity = Activity::with('activityMessages', 'activityMessages.sender', 'creator')->find($activityId);
 
         return Inertia::render('ActivityChat', [
             'activity' => $activity,

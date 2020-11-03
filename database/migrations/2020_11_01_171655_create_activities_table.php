@@ -27,6 +27,8 @@ class CreateActivitiesTable extends Migration
             $table->string('address');
 
             $table->foreignId('creator_id');
+
+            $table->timestamp('begin');
         });
     }
 

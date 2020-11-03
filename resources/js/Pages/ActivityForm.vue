@@ -13,7 +13,7 @@
 
                 <div class="mb-4">
                     <label for="description" class="block mr-4 mb-4">Description:</label>
-                    <input id="description" class="border rounded w-full" type="text" placeholder=" Description" v-model="form.description">
+                    <textarea id="description" class="border rounded w-full" type="text" placeholder=" Description" v-model="form.description"></textarea>
                 </div>
 
                 <div class="mb-4">

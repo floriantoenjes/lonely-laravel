@@ -52,4 +52,9 @@ class Activity extends Model
     {
         return $this->hasMany('App\Models\ActivityMessage');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }
