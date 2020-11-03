@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\ChatMessage;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -21,7 +22,7 @@ class MessageReceived implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct(ChatMessage $message)
     {
         $this->message = $message;
     }
@@ -33,6 +34,9 @@ class MessageReceived implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('messages');
+        $firstUserId = min((int)$this->message->sender_id, (int)$this->message->receiver_id);
+        $secondUserId = max((int)$this->message->sender_id, (int)$this->message->receiver_id);
+
+        return new Channel('messages.' . $firstUserId . '.' . $secondUserId);
     }
 }
