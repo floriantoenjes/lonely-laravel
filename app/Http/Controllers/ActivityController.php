@@ -69,4 +69,13 @@ class ActivityController extends Controller
             'left' => true,
         ]);
     }
+
+    public function activity($activityId)
+    {
+        $activity = Activity::find($activityId);
+
+        return Inertia::render('Activity', [
+            'activity' => $activity
+        ]);
+    }
 }

@@ -47,4 +47,9 @@ class Activity extends Model
     {
         return $this->belongsToMany('App\Models\User')->withTimestamps();
     }
+
+    public function activityMessages()
+    {
+        return $this->hasMany('App\ActiviyMessage');
+    }
 }

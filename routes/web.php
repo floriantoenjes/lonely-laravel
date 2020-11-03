@@ -49,3 +49,4 @@ Route::get('/activity/new', [ActivityController::class, 'newActivity'])->name('n
 Route::post('/activity/new', [ActivityController::class, 'createActivity'])->name('create-activity');
 Route::post('/activity/{activityId}/join', [ActivityController::class, 'joinActivity'])->name('join-activity');
 Route::post('/activity/{activityId}/leave', [ActivityController::class, 'leaveActivity'])->name('leave-activity');
+Route::get('/activity/{activityId}',  [ActivityController::class, '']);
