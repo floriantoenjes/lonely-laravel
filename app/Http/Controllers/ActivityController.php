@@ -21,7 +21,8 @@ class ActivityController extends Controller
     public function newActivity()
     {
         return Inertia::render('ActivityForm', [
-            'activities' => Activity::get()
+            'activities' => Activity::get(),
+            'joinedActivities' => Auth::user()->joinedActivities()->get()
         ]);
     }
 
@@ -53,6 +54,19 @@ class ActivityController extends Controller
     {
         $activity = Activity::find($activityId);
         $activity->users()->save(Auth::user());
+
+        return response()->json([
+            'joined' => true,
+        ]);
     }
 
+    public function leaveActivity($activityId)
+    {
+        $activity = Activity::find($activityId);
+        $activity->users()->detach(Auth::user()->id);
+
+        return response()->json([
+            'left' => true,
+        ]);
+    }
 }

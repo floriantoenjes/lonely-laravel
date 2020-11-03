@@ -17,9 +17,9 @@
                         <div class="flex flex-col mb-4">
                             <div class="flex flex-row">
                                 <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span
-                                    class="font-bold text-lg">You</span> {{ formatDateFromMessage(chatMessage) }}: </p>
+                                    class="font-bold text-lg">You</span> {{ formatTime(chatMessage.created_at) }}: </p>
                                 <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span>
-                                    {{ formatDateFromMessage(chatMessage) }}: </p>
+                                    {{ formatTime(chatMessage.created_at) }}: </p>
                             </div>
                             <p>{{ chatMessage.chat_message }}</p>
                         </div>
@@ -80,11 +80,8 @@ export default {
             const el = messagesDivs[messagesDivs.length - 1];
             el.scrollIntoView();
         },
-        formatDateFromMessage(message) {
-            let [date, time] = message.created_at.split('T');
-            date = date.substr(0, 10);
-            time = time.substr(0, 8);
-            return time;
+        formatTime(createdAt) {
+            return moment(createdAt).format('LTS');
         }
     }
 }

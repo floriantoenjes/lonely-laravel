@@ -37,10 +37,17 @@
                 </button>
             </form>
 
-            <div class="m-4 p-16 w-3/4 bg-white">
+            <div class="m-4 p-16 w-1/3 bg-white">
                 <ul class="list-disc list-inside">
-                    <li v-for="activity in activities">{{ activity.name }} at <span>{{ activity.created_at }}</span>
-                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-8" @click="joinActivity(activity.id)">Join</button></li>
+                    <li v-for="activity in notJoinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-8" @click="joinActivity(activity)">Join</button></li>
+                </ul>
+            </div>
+
+            <div class="m-4 p-16 w-1/3 bg-white">
+                <ul class="list-disc list-inside">
+                    <li v-for="activity in joinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
+                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-8" @click="leaveActivity(activity)">Leave</button></li>
                 </ul>
             </div>
         </div>
@@ -54,7 +61,8 @@ export default {
     name: "ActivityForm",
     components: {Button, AppLayout},
     props: {
-        activities: {}
+        activities: {},
+        joinedActivities: {}
     },
     data() {
         return {
@@ -65,15 +73,39 @@ export default {
                 postcode: '',
                 address: ''
 
-            })
+            }),
+        }
+    },
+    computed: {
+        notJoinedActivities: function () {
+            // console.log(this.activities, this.joinedActivities);
+            return this.activities.filter(a => this.joinedActivities.indexOf(a.id) === -1);
         }
     },
     methods: {
         createActivity() {
             this.form.post(route('create-activity'), this.form);
         },
-        joinActivity(activityId) {
-            axios.post(`/activity/${activityId}/join`);
+        joinActivity(activity) {
+            axios.post(`/activity/${activity.id}/join`).then(
+                response => {
+                    if (response.data.joined) {
+                        this.activities.splice(this.activities.indexOf(activity), 1);
+                        this.joinedActivities.push(activity);
+                    }
+                });
+        },
+        leaveActivity(activity) {
+            axios.post(`/activity/${activity.id}/leave`).then(
+                response => {
+                    if (response.data.left) {
+                        this.joinedActivities.splice(this.joinedActivities.indexOf(activity), 1);
+                        this.activities.push(activity);
+                    }
+                });
+        },
+        formatDateTime(dateTime) {
+            return moment(dateTime).format('LLL');
         }
     }
 }
