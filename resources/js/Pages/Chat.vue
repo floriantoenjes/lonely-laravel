@@ -85,7 +85,9 @@ export default {
             const messagesDivs = this.$el.getElementsByClassName('messages-div');
             const el = messagesDivs[messagesDivs.length - 1];
             if (el !== undefined) {
-                el.scrollIntoView();
+                setTimeout(function () {
+                    el.scrollIntoView();
+                });
             }
         },
         formatTime(createdAt) {
