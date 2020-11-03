@@ -4,7 +4,9 @@
 namespace App\Http\Controllers;
 
 
+use App\Events\ActivityMessageReceived;
 use App\Models\Activity;
+use App\Models\ActivityMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -70,12 +72,29 @@ class ActivityController extends Controller
         ]);
     }
 
-    public function activity($activityId)
+    public function activityDetail($activityId)
     {
-        $activity = Activity::find($activityId);
+        $activity = Activity::with('activityMessages')->find($activityId);
 
-        return Inertia::render('Activity', [
-            'activity' => $activity
+        return Inertia::render('ActivityChat', [
+            'activity' => $activity,
+            'currentUser' => Auth::user()
+        ]);
+    }
+
+    public function sendActivityMessage(Request $request, $activityId)
+    {
+        $activityMessage = new ActivityMessage();
+        $activityMessage->sender_id = Auth::user()->id;
+        $activityMessage->activity_id = $activityId;
+        $activityMessage->activity_message = $request->input('activityMessageInput');
+
+        $activityMessage->save();
+
+        event(new ActivityMessageReceived($activityMessage));
+
+        return Redirect::route('activity-detail', [
+            'activityId' => $activityId
         ]);
     }
 }

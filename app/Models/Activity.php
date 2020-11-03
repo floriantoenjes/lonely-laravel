@@ -50,6 +50,6 @@ class Activity extends Model
 
     public function activityMessages()
     {
-        return $this->hasMany('App\ActiviyMessage');
+        return $this->hasMany('App\Models\ActivityMessage');
     }
 }

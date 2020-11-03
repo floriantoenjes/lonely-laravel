@@ -8,20 +8,19 @@
 
         <div class="flex flex-col">
             <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
-                <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
+                <div v-for="activityMessage in activity.activity_messages" class="messages-div mb-4 overflow-scroll">
                     <div class="flex flex-row">
                         <div style="min-width: 5em; max-width: 5em">
-                            <img class="h-16 rounded block mb-4 block m-auto" v-if="chatMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
-                            <img class="h-16 rounded block mb-4 block m-auto" v-else :src="receiver.profile_photo_url">
+                            <img class="h-16 rounded block mb-4 block m-auto" v-if="activityMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
                         </div>
                         <div class="flex flex-col mb-4">
                             <div class="flex flex-row">
-                                <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span
-                                    class="font-bold text-lg">You</span> {{ formatTime(chatMessage.created_at) }}: </p>
-                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span>
-                                    {{ formatTime(chatMessage.created_at) }}: </p>
+                                <p class="mr-4" v-if="activityMessage.sender_id === currentUser.id"><span
+                                    class="font-bold text-lg">You</span> {{ formatTime(activityMessage.created_at) }}: </p>
+                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ activity.name }}</span>
+                                    {{ formatTime(activityMessage.created_at) }}: </p>
                             </div>
-                            <p>{{ chatMessage.chat_message }}</p>
+                            <p>{{ activityMessage.activity_message }}</p>
                         </div>
                     </div>
                 </div>
@@ -30,7 +29,7 @@
             <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
-                       v-model="form.chatMessageInput"
+                       v-model="form.activityMessageInput"
                        autocomplete="off">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
             </form>
@@ -43,33 +42,30 @@ import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
 
 export default {
-    name: "Chat",
+    name: "ActivityChat",
     components: {AppLayout, Label},
     props: {
-        'userId': {
-            type: String
-        },
+        'activity': {},
         'currentUser': {},
-        'receiver': {},
-        'chatMessages': {}
     },
     data() {
         return {
             form: this.$inertia.form({
-                chatMessageInput: ''
+                activityMessageInput: ''
             }),
         }
     },
     mounted() {
-        Echo.channel('messages').listen('MessageReceived', (e) => {
-            this.chatMessages.push(e.message);
+        Echo.channel('activity-messages').listen('ActivityMessageReceived', (e) => {
+            // this.chatMessages.push(e.message);
+            console.log('activityMessage');
             this.scrollToLastMessage();
         });
         this.scrollToLastMessage();
     },
     methods: {
         sendChatMessage() {
-            this.form.post(route('send-chat-message', { userId: this.userId }, this.form), {
+            this.form.post(route('send-activity-message', { activityId: this.activity.id }, this.form), {
                 onSuccess: () => {
                     this.scrollToLastMessage();
                 }
