@@ -78,8 +78,8 @@ export default {
     },
     computed: {
         notJoinedActivities: function () {
-            // console.log(this.activities, this.joinedActivities);
-            return this.activities.filter(a => this.joinedActivities.indexOf(a.id) === -1);
+            const joinedActivityIds = this.joinedActivities.map(jA => jA.id);
+            return this.activities.filter(a => joinedActivityIds.indexOf(a.id) === -1);
         }
     },
     methods: {
