@@ -38,6 +38,7 @@
             </form>
 
             <div class="m-4 p-16 w-1/3 bg-white">
+                <h2 class="text-2xl">Activities</h2>
                 <ul class="list-disc list-inside">
                     <li v-for="activity in notJoinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
                         <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-8" @click="joinActivity(activity)">Join</button></li>
@@ -45,6 +46,7 @@
             </div>
 
             <div class="m-4 p-16 w-1/3 bg-white">
+                <h2 class="text-2xl">Joined Activities</h2>
                 <ul class="list-disc list-inside">
                     <li v-for="activity in joinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
                         <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-8" @click="leaveActivity(activity)">Leave</button></li>
