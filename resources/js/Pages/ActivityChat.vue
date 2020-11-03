@@ -62,7 +62,7 @@ export default {
     mounted() {
         Echo.channel('activity-messages').listen('ActivityMessageReceived', (e) => {
             // this.chatMessages.push(e.message);
-            console.log('activityMessage');
+            console.log('activityMessage', e.activityMessage.activity_message);
             this.scrollToLastMessage();
         });
         this.scrollToLastMessage();
@@ -79,7 +79,9 @@ export default {
             const messagesDivs = this.$el.getElementsByClassName('messages-div');
             const el = messagesDivs[messagesDivs.length - 1];
             if (el !== undefined) {
-                el.scrollIntoView();
+                setTimeout(function () {
+                    el.scrollIntoView();
+                });
             }
         },
         formatTime(createdAt) {
