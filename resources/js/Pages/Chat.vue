@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat with {{ userId }}
+                Chat with {{ receiver.name }}
             </h2>
         </template>
 
@@ -69,7 +69,7 @@ export default {
     },
     methods: {
         sendChatMessage() {
-            this.form.post(route('send-chat-message', { userId: this.userId }, this.form), {
+            this.form.post(route('send-chat-message', { userId: this.receiver.id }, this.form), {
                 onSuccess: () => {
                     this.scrollToLastMessage();
                 }

@@ -37,7 +37,6 @@ class ChatController extends Controller
             ->get();
 
         return Inertia::render('Chat', [
-            'userId' => $userId,
             'currentUser' => Auth::user(),
             'receiver' => User::find($userId),
             'chatMessages' => $chatMessages
