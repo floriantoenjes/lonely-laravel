@@ -34,4 +34,9 @@ class ActivityMessage extends Model
     {
         return $this->belongsTo('App\Models\Activity');
     }
+
+    public function sender()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

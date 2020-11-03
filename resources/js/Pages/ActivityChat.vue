@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat with Michalis
+                {{ activity.name }}
             </h2>
         </template>
 
@@ -12,12 +12,13 @@
                     <div class="flex flex-row">
                         <div style="min-width: 5em; max-width: 5em">
                             <img class="h-16 rounded block mb-4 block m-auto" v-if="activityMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
+                            <img class="h-16 rounded block mb-4 block m-auto" v-else :src="activityMessage.sender.profile_photo_url">
                         </div>
                         <div class="flex flex-col mb-4">
                             <div class="flex flex-row">
                                 <p class="mr-4" v-if="activityMessage.sender_id === currentUser.id"><span
                                     class="font-bold text-lg">You</span> {{ formatTime(activityMessage.created_at) }}: </p>
-                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ activity.name }}</span>
+                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ activityMessage.sender.name }}</span>
                                     {{ formatTime(activityMessage.created_at) }}: </p>
                             </div>
                             <p>{{ activityMessage.activity_message }}</p>
