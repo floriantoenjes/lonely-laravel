@@ -91,7 +91,9 @@ class ActivityController extends Controller
 
         $activityMessage->save();
 
-        event(new ActivityMessageReceived($activityMessage));
+        $activityMessageWithSender = ActivityMessage::with('sender')->find($activityMessage->id);
+
+        event(new ActivityMessageReceived($activityMessageWithSender));
 
         return Redirect::route('activity-detail', [
             'activityId' => $activityId

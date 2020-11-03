@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\ActivityMessage;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -21,7 +22,7 @@ class ActivityMessageReceived implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($activityMessage)
+    public function __construct(ActivityMessage $activityMessage)
     {
         $this->activityMessage = $activityMessage;
     }
@@ -33,6 +34,6 @@ class ActivityMessageReceived implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('activity-messages');
+        return new Channel('activity-messages.' . $this->activityMessage->activity_id);
     }
 }

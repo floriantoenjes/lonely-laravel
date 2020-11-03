@@ -60,9 +60,11 @@ export default {
         }
     },
     mounted() {
-        Echo.channel('activity-messages').listen('ActivityMessageReceived', (e) => {
+        Echo.channel(`activity-messages.${this.activity.id}`).listen('ActivityMessageReceived', (e) => {
             // this.chatMessages.push(e.message);
+            console.log('activityMessage', e);
             console.log('activityMessage', e.activityMessage.activity_message);
+            this.activity.activity_messages.push(e.activityMessage);
             this.scrollToLastMessage();
         });
         this.scrollToLastMessage();
