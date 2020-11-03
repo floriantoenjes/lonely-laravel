@@ -2,12 +2,15 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ activity.name }}
+                Activity: {{ activity.name }}
             </h2>
         </template>
 
         <div class="flex flex-col">
             <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
+
+                <h4 class="text-xl text-center" v-if="activity.activity_messages.length === 0">Be the first to write a message!</h4>
+
                 <div v-for="activityMessage in activity.activity_messages" class="messages-div mb-4 overflow-scroll">
                     <div class="flex flex-row">
                         <div style="min-width: 5em; max-width: 5em">

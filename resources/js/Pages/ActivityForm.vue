@@ -48,7 +48,9 @@
             <div class="m-4 p-16 w-1/3 bg-white">
                 <h2 class="text-2xl">Joined Activities</h2>
                 <ul class="list-disc list-inside">
-                    <li v-for="activity in joinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
+                    <li v-for="activity in joinedActivities" :key="activity.id">
+                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> on
+                        <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
                         <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-8" @click="leaveActivity(activity)">Leave</button></li>
                 </ul>
             </div>
@@ -98,6 +100,7 @@ export default {
                 });
         },
         leaveActivity(activity) {
+            // TODO: Fix a bug that's pushing an already left activity twice
             axios.post(`/activity/${activity.id}/leave`).then(
                 response => {
                     if (response.data.left) {
