@@ -156,9 +156,13 @@ export default {
             for (const lonelyPerson of this.lonelyPersons) {
                 this.markers.push({
                     position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
-                    weight: 100
+                    weight: 50
                 });
             }
+            this.markers.push({
+                position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
+                weight: 100
+            })
         });
     },
     methods: {
