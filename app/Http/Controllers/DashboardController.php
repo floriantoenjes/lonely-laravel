@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -103,23 +104,20 @@ class DashboardController extends Controller
     }
 
     function getCoordinatesFromAddress(string $address) {
-//    $prepAddr = str_replace(' ','+',$address);
-//    $geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false');
-//    $output = json_decode($geocode);
-//
-//    if ($output->error_message) {
-//        return false;
-//    }
-//
-//    return [
-//        'latitude' => $output->results[0]->geometry->location->lat,
-//        'longitude' => $output->results[0]->geometry->location->lng
-//    ];
+        $prepAddr = str_replace(' ','+',$address);
+
+        $geocodeApiKey = \config('google_api.geocodeApiKey');
+        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='. $prepAddr . '&key=' . $geocodeApiKey);
+
+        $location = json_decode($response->body())->results[0]->geometry->location;
+        $lat = $location->lat;
+        $lng = $location->lng;
 
         return [
-            'latitude' => '53.044941',
-            'longitude' => '8.517674'
+            'latitude' => $lat,
+            'longitude' => $lng
         ];
+
     }
 
     /**
