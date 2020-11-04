@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
             }
 
-            $lonelyPersons = User::whereIn('id', $lonelyPersonIds)->get();
+            $lonelyPersons = User::with('userLonelySetting')->whereIn('id', $lonelyPersonIds)->get();
         } else {
             $lonelyPersons = [];
         }

@@ -56,11 +56,32 @@
                 </form>
             </div>
 
-            <div class="m-4 p-16 w-3/4 h-auto bg-white map" :style="lonely ? 'background-image: url(img/maps_placeholder.png)' : ''">
+            <!--            <div class="m-4 p-16 w-3/4 h-auto bg-white map" :style="lonely ? 'background-image: url(img/maps_placeholder.png)' : ''">-->
+            <div class="m-4 w-3/4 h-auto bg-white">
+
+                <GmapMap
+                    :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
+                    :zoom="12"
+                    map-type-id="roadmap"
+                    style="width: 100%; height: 100%"
+                >
+                    <GmapMarker
+                        :key="index"
+                        v-for="(m, index) in markers"
+                        :position="m.position"
+                        :clickable="true"
+                        :draggable="false"
+                        @click="test"
+                    />
+                </GmapMap>
+
                 <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: calc(15% - 1.5rem)">Are you lonely  today? Mark yourself as lonely!</p>
+
                 <div v-else class="bg-white p-4 rounded" style="width: max-content">
+
                     <h2 class="text-2xl mb-2" v-if="lonelyPersons.length > 0">Lonely People:</h2>
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
+
                     <ul class="list-disc list-inside">
                         <li v-for="lonelyPerson in lonelyPersons">
                             <inertia-link class="text-blue-500 hover:text-black" :href="route('chat', lonelyPerson.id)">{{ lonelyPerson.name }}</inertia-link>
@@ -86,6 +107,8 @@ import JetInput from '../Jetstream/Input';
 import Input from "../Jetstream/Input";
 import { Inertia } from '@inertiajs/inertia';
 import Button from "../Jetstream/Button";
+
+import { gmapApi } from 'gmap-vue';
 
 export default {
     name: "LonelyDashboard",
@@ -114,8 +137,12 @@ export default {
             }, {
                 resetOnSuccess: false
             }),
-            loading: false
+            loading: false,
+            markers: []
         }
+    },
+    computed: {
+        google: gmapApi
     },
     mounted() {
         Inertia.on('start', event => {
@@ -125,6 +152,18 @@ export default {
         Inertia.on('finish', event => {
             this.loading = false;
         });
+
+        this.$gmapApiPromiseLazy().then(() => {
+            console.log('Map loaded', this.google)
+            this.markers = [
+                {
+                    position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
+                    weight: 100
+                }
+            ];
+            console.log(this.markers[0].position);
+        });
+
     },
     methods: {
         updateLonelySettings() {
@@ -133,6 +172,9 @@ export default {
             } else if (this.lonely) {
                 this.form.post(route('lonely-no-more'));
             }
+        },
+        test() {
+            alert('Hey!');
         }
     }
 }
