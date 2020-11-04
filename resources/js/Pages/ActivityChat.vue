@@ -37,7 +37,12 @@
                     <img class="h-16 rounded mb-4 mr-4" :src="activity.creator.profile_photo_url">
                     <h3 class="text-lg mb-8">created by {{ activity.creator.name }}</h3>
                     <h3 class="text-xl mb-4">Description:</h3>
-                    <p>{{ activity.description }}</p>
+                    <p class="mb-8">{{ activity.description }}</p>
+
+                    <h2 class="text-xl">Joined users</h2>
+                    <ul class="list-disc list-inside">
+                        <li v-for="joinedUser in joinedUsers">{{ joinedUser.name }}</li>
+                    </ul>
                 </div>
             </div>
 
@@ -62,6 +67,7 @@ export default {
     props: {
         'activity': {},
         'currentUser': {},
+        'joinedUsers': {}
     },
     data() {
         return {

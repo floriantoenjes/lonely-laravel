@@ -49,7 +49,7 @@ class ActivityController extends Controller
         $activity->creator_id = Auth::user()->id;
         $activity->save();
 
-        return Redirect::route('lonely-dashboard');
+        return Redirect::route('new-activity-form');
     }
 
     public function joinActivity($activityId)
@@ -75,10 +75,12 @@ class ActivityController extends Controller
     public function activityDetail($activityId)
     {
         $activity = Activity::with('activityMessages', 'activityMessages.sender', 'creator')->find($activityId);
+        $joinedUsers = $activity->users()->get();
 
         return Inertia::render('ActivityChat', [
             'activity' => $activity,
-            'currentUser' => Auth::user()
+            'currentUser' => Auth::user(),
+            'joinedUsers' => $joinedUsers
         ]);
     }
 
