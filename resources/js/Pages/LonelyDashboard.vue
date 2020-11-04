@@ -8,7 +8,7 @@
 
         <div class="flex flex-row">
             <div class="m-4 p-16 w-1/4 h-full bg-white">
-                <form class="flex flex-col" @submit.prevent="updateLonelySettings">
+                <form class="flex flex-col" @submit.prevent="updateLonelySettings" id="lonelySettings">
                     <div class="mb-4">
                         <label for="city" class="block mr-4 mb-4">City:</label>
                         <input id="city" class="border rounded w-full" type="text" placeholder=" City" v-model="form.city">
@@ -74,7 +74,7 @@
                         :clickable="true"
                         :draggable="false"
                         :title="m.username"
-                        @click="test(m.userId)"
+                        @click="openChat(m.userId)"
                     />
                 </GmapMap>
 
@@ -167,18 +167,40 @@ export default {
                 weight: 100
             })
         });
+
+        if (this.lonely) {
+            this.disableSettingsForm();
+        } else {
+            this.enableSettingsForm();
+        }
     },
     methods: {
         updateLonelySettings() {
             if (!this.lonely) {
                 this.form.post(route('lonely-dashboard', this.form));
+                this.disableSettingsForm();
             } else if (this.lonely) {
                 this.form.post(route('lonely-no-more'));
+                this.enableSettingsForm();
             }
         },
-        test(userId) {
+        openChat(userId) {
             if (userId !== undefined) {
                 this.$inertia.get(`/chat/${userId}`);
+            }
+        },
+        enableSettingsForm() {
+            const form = document.getElementById('lonelySettings');
+            const elements = form.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                elements[i].readOnly = false;
+            }
+        },
+        disableSettingsForm() {
+            const form = document.getElementById('lonelySettings');
+            const elements = form.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                elements[i].readOnly = true;
             }
         }
     }
