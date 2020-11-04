@@ -56,14 +56,16 @@
                 </form>
             </div>
 
-            <!--            <div class="m-4 p-16 w-3/4 h-auto bg-white map" :style="lonely ? 'background-image: url(img/maps_placeholder.png)' : ''">-->
-            <div class="m-4 w-3/4 h-auto bg-white">
+            <div class="m-4 w-3/4 h-auto bg-white relative">
+
+                <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: calc(15% - 1.5rem)">Are you lonely  today? Mark yourself as lonely!</p>
 
                 <GmapMap
                     :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
                     :zoom="12"
                     map-type-id="roadmap"
                     style="width: 100%; height: 100%"
+                    v-if="lonely"
                 >
                     <GmapMarker
                         :key="index"
@@ -75,9 +77,7 @@
                     />
                 </GmapMap>
 
-                <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: calc(15% - 1.5rem)">Are you lonely  today? Mark yourself as lonely!</p>
-
-                <div v-else class="bg-white p-4 rounded" style="width: max-content">
+                <div v-if="lonely" class="bg-white p-4 rounded" style="width: max-content; position: absolute; left: 0.5rem; top: 4rem">
 
                     <h2 class="text-2xl mb-2" v-if="lonelyPersons.length > 0">Lonely People:</h2>
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
@@ -91,10 +91,6 @@
             </div>
 
         </div>
-
-<!--        <div class="flex flex-col mx-4">-->
-<!--            <inertia-link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8 self-start" :href="route('new-activity-form')">Create an activity!</inertia-link>-->
-<!--        </div>-->
 
     </app-layout>
 </template>
@@ -154,14 +150,12 @@ export default {
         });
 
         this.$gmapApiPromiseLazy().then(() => {
-            console.log('Map loaded', this.google)
             this.markers = [
                 {
                     position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
                     weight: 100
                 }
             ];
-            console.log(this.markers[0].position);
         });
 
     },
