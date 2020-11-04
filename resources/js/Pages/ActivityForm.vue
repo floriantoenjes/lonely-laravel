@@ -95,8 +95,8 @@ export default {
             axios.post(`/activity/${activity.id}/join`).then(
                 response => {
                     if (response.data.joined) {
-                        this.activities.splice(this.activities.indexOf(activity), 1);
                         this.joinedActivities.push(activity);
+                        this.$forceUpdate();
                     }
                 });
         },
@@ -106,7 +106,7 @@ export default {
                 response => {
                     if (response.data.left) {
                         this.joinedActivities.splice(this.joinedActivities.indexOf(activity), 1);
-                        this.activities.push(activity);
+                        this.$forceUpdate();
                     }
                 });
         },
