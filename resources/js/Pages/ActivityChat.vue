@@ -15,8 +15,8 @@
                     <div v-for="activityMessage in activity.activity_messages" class="messages-div mb-4 overflow-scroll">
                         <div class="flex flex-row">
                             <div style="min-width: 5em; max-width: 5em">
-                                <img class="h-16 rounded block mb-4 block m-auto" v-if="activityMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
-                                <img class="h-16 rounded block mb-4 block m-auto" v-else :src="activityMessage.sender.profile_photo_url">
+                                <img class="h-16 rounded mb-4 block m-auto" v-if="activityMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
+                                <img class="h-16 rounded mb-4 block m-auto" v-else :src="activityMessage.sender.profile_photo_url">
                             </div>
                             <div class="flex flex-col mb-4">
                                 <div class="flex flex-row">
@@ -33,9 +33,10 @@
 
                 <div class="bg-white m-4 p-16 overflow-scroll w-2/4" style="height: 75vh">
                     <!-- TODO: Replace with begin-time -->
-                    <h2 class="text-xl mb-8">{{ activity.name }} <span class="text-blue-500 text-base">14:15 PM</span></h2>
-                    <h3 class="text-lg mb-8">created by: {{ activity.creator.name }}</h3>
-                    <h3 class="text-lg mb-4">Description:</h3>
+                    <h2 class="text-2xl mb-4 mr-4">{{ activity.name }} <span class="text-base"> at </span><span class="text-blue-500 text-base">14:15 PM</span></h2>
+                    <img class="h-16 rounded mb-4 mr-4" :src="activity.creator.profile_photo_url">
+                    <h3 class="text-lg mb-8">created by {{ activity.creator.name }}</h3>
+                    <h3 class="text-xl mb-4">Description:</h3>
                     <p>{{ activity.description }}</p>
                 </div>
             </div>
