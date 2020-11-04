@@ -62,7 +62,7 @@
 
                 <GmapMap
                     :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
-                    :zoom="12"
+                    :zoom="zoomLevel"
                     map-type-id="roadmap"
                     style="width: 100%; height: 100%"
                     v-if="lonely"
@@ -134,11 +134,14 @@ export default {
                 resetOnSuccess: false
             }),
             loading: false,
-            markers: []
+            markers: [],
         }
     },
     computed: {
-        google: gmapApi
+        google: gmapApi,
+        zoomLevel: function () {
+            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius));
+        }
     },
     mounted() {
         Inertia.on('start', event => {
@@ -157,7 +160,6 @@ export default {
                 });
             }
         });
-
     },
     methods: {
         updateLonelySettings() {
