@@ -73,7 +73,8 @@
                         :position="m.position"
                         :clickable="true"
                         :draggable="false"
-                        @click="test"
+                        :title="m.username"
+                        @click="test(m.userId)"
                     />
                 </GmapMap>
 
@@ -156,7 +157,9 @@ export default {
             for (const lonelyPerson of this.lonelyPersons) {
                 this.markers.push({
                     position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
-                    weight: 50
+                    weight: 50,
+                    userId: lonelyPerson.id,
+                    username: lonelyPerson.name,
                 });
             }
             this.markers.push({
@@ -173,8 +176,10 @@ export default {
                 this.form.post(route('lonely-no-more'));
             }
         },
-        test() {
-            alert('Hey!');
+        test(userId) {
+            if (userId !== undefined) {
+                this.$inertia.get(`/chat/${userId}`);
+            }
         }
     }
 }
