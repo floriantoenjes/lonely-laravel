@@ -174,21 +174,7 @@ export default {
             this.loading = false;
         });
 
-        this.$gmapApiPromiseLazy().then(() => {
-            for (const lonelyPerson of this.lonelyPersons) {
-                this.markers.push({
-                    position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
-                    weight: 50,
-                    // userId: lonelyPerson.id,
-                    // username: lonelyPerson.name,
-                    user: lonelyPerson
-                });
-            }
-            this.markers.push({
-                position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
-                weight: 100
-            })
-        });
+        this.generateMarkers();
 
         if (this.lonely) {
             this.disableSettingsForm();
@@ -199,7 +185,7 @@ export default {
     methods: {
         updateLonelySettings() {
             if (!this.lonely) {
-                this.form.post(route('lonely-dashboard', this.form));
+                this.form.post(route('lonely-dashboard', this.form)).then(() => this.generateMarkers());
                 this.disableSettingsForm();
             } else if (this.lonely) {
                 this.form.post(route('lonely-no-more'));
@@ -241,6 +227,24 @@ export default {
         },
         getPositionFromUser(user) {
             return new google.maps.LatLng({ lat: +user.user_lonely_setting.latitude, lng: +user.user_lonely_setting.longitude});
+        },
+        generateMarkers() {
+            this.markers = [];
+            this.$gmapApiPromiseLazy().then(() => {
+                for (const lonelyPerson of this.lonelyPersons) {
+                    this.markers.push({
+                        position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
+                        weight: 50,
+                        // userId: lonelyPerson.id,
+                        // username: lonelyPerson.name,
+                        user: lonelyPerson
+                    });
+                }
+                this.markers.push({
+                    position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
+                    weight: 100
+                })
+            });
         }
     }
 }
