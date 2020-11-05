@@ -73,8 +73,8 @@
                         :position="m.position"
                         :clickable="true"
                         :draggable="false"
-                        :title="m.username"
                         @click="openChat(m.userId)"
+                        @mouseover="showPersonDetails($event, m.username)"
                     />
                 </GmapMap>
 
@@ -91,6 +91,10 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="my-modal bg-white px-8 py-4 rounded" v-if="showModal" :style="'position: absolute;top:' + modalY + 'px;left:' + modalX + 'px;min-width: 100px;'">
+            <p class="text-center">{{ modalUsername }}</p>
         </div>
 
     </app-layout>
@@ -136,6 +140,10 @@ export default {
             }),
             loading: false,
             markers: [],
+            showModal: false,
+            modalX: 0,
+            modalY: 0,
+            modalUsername: ''
         }
     },
     computed: {
@@ -202,6 +210,19 @@ export default {
             for (var i = 0, len = elements.length; i < len; ++i) {
                 elements[i].readOnly = true;
             }
+        },
+        showPersonDetails(event, userId) {
+            console.log(event, userId);
+            const rect = event.vb.target.getBoundingClientRect();
+            this.modalX = rect.x - 40;
+            this.modalY = rect.y - 60;
+            if (!userId) {
+                this.modalUsername = 'You';
+            } else {
+                this.modalUsername = userId;
+            }
+            this.showModal = true;
+
         }
     }
 }
