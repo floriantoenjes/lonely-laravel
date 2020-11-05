@@ -93,7 +93,7 @@
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
 
                     <ul class="list-disc list-inside">
-                        <li v-for="lonelyPerson in lonelyPersons">
+                        <li v-for="lonelyPerson in lonelyPersons" @mouseover="showPersonDetails($event, lonelyPerson, getPositionFromUser(lonelyPerson))">
                             <inertia-link class="text-blue-500 hover:text-black" :href="route('chat', lonelyPerson.id)">{{ lonelyPerson.name }}</inertia-link>
                         </li>
                     </ul>
@@ -236,6 +236,9 @@ export default {
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
+        },
+        getPositionFromUser(user) {
+            return new google.maps.LatLng({ lat: +user.user_lonely_setting.latitude, lng: +user.user_lonely_setting.longitude});
         }
     }
 }
