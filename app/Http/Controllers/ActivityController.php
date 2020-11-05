@@ -23,8 +23,8 @@ class ActivityController extends Controller
     public function newActivity()
     {
         return Inertia::render('ActivityForm', [
-            'activities' => Activity::get(),
-            'joinedActivities' => Auth::user()->joinedActivities()->get()
+            'activities' => Activity::with('creator')->get(),
+            'joinedActivities' => Auth::user()->joinedActivities()->with('creator')->get()
         ]);
     }
 

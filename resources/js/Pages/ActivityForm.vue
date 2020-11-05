@@ -1,7 +1,7 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="text-xl">Create a New Activity</h2>
+            <h2 class="text-xl">Current Activities</h2>
         </template>
 
         <div class="flex flex-row">
@@ -38,21 +38,23 @@
             </form>
 
             <div class="m-4 p-16 w-1/3 bg-white">
-                <h2 class="text-2xl">Activities</h2>
-                <ul class="list-disc list-inside">
+                <h2 class="text-2xl mb-8">Available Activities</h2>
+                <ul class="list-disc list-inside text-lg">
                     <p class="mt-8 text-lg" v-if="notJoinedActivities.length === 0">There are no other activities set for today!</p>
-                    <li v-for="activity in notJoinedActivities" :key="activity.id">{{ activity.name }} on <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
-                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-8" @click="joinActivity(activity)">Join</button></li>
+                    <li v-for="activity in notJoinedActivities" :key="activity.id" class="mb-4">
+                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+<!--                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" @click="joinActivity(activity)">Join</button>-->
+                    </li>
                 </ul>
             </div>
 
             <div class="m-4 p-16 w-1/3 bg-white">
-                <h2 class="text-2xl">Joined Activities</h2>
-                <ul class="list-disc list-inside">
-                    <li v-for="activity in joinedActivities" :key="activity.id">
-                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at
-                        <span class="mr-4">{{ formatDateTime(activity.created_at) }}</span>
-                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-8" @click="leaveActivity(activity)">Leave</button></li>
+                <h2 class="text-2xl mb-8">Joined Activities</h2>
+                <ul class="list-disc list-inside text-lg">
+                    <li v-for="activity in joinedActivities" :key="activity.id" class="mb-4">
+                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+<!--                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" @click="leaveActivity(activity)">Leave</button>-->
+                    </li>
                 </ul>
             </div>
         </div>
