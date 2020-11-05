@@ -73,8 +73,8 @@
                         :position="m.position"
                         :clickable="true"
                         :draggable="false"
-                        @click="openChat(m.userId)"
-                        @mouseover="showPersonDetails($event, m.username)"
+                        @click="openChat(m.user.userId)"
+                        @mouseover="showPersonDetails($event, m.user)"
                     />
                 </GmapMap>
 
@@ -94,7 +94,7 @@
         </div>
 
         <div class="my-modal bg-white px-8 py-4 rounded" v-if="showModal" :style="'position: absolute;top:' + modalY + 'px;left:' + modalX + 'px;min-width: 100px;'">
-            <p class="text-center">{{ modalUsername }}</p>
+            <p class="text-center">{{ modalUser.name }}, {{ calculateAge(modalUser.birthdate) }}</p>
         </div>
 
     </app-layout>
@@ -143,7 +143,7 @@ export default {
             showModal: false,
             modalX: 0,
             modalY: 0,
-            modalUsername: ''
+            modalUser: null
         }
     },
     computed: {
@@ -166,8 +166,9 @@ export default {
                 this.markers.push({
                     position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
                     weight: 50,
-                    userId: lonelyPerson.id,
-                    username: lonelyPerson.name,
+                    // userId: lonelyPerson.id,
+                    // username: lonelyPerson.name,
+                    user: lonelyPerson
                 });
             }
             this.markers.push({
@@ -211,18 +212,19 @@ export default {
                 elements[i].readOnly = true;
             }
         },
-        showPersonDetails(event, userId) {
-            console.log(event, userId);
+        showPersonDetails(event, user) {
             const rect = event.vb.target.getBoundingClientRect();
             this.modalX = rect.x - 40;
             this.modalY = rect.y - 60;
-            if (!userId) {
-                this.modalUsername = 'You';
+            if (!user) {
+                // this.modalUser = 'You';
             } else {
-                this.modalUsername = userId;
+                this.modalUser = user;
             }
             this.showModal = true;
-
+        },
+        calculateAge(birthdate) {
+            return moment().diff(birthdate, 'years');
         }
     }
 }
