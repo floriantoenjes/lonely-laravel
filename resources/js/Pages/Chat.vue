@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight" v-if="receiver">
-                You are chating with {{ receiver.name }}
+                You are chatting with {{ receiver.name }}
             </h2>
         </template>
 
