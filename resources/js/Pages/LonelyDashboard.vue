@@ -78,9 +78,9 @@
                     />
 
                     <GmapInfoWindow
-                        :opened="infoWindowOpen"
-                        :position="infoWindowPosition"
-                        :options="infoOptions"
+                        :opened="infoWindow.open"
+                        :position="infoWindow.position"
+                        :options="infoWindow.options"
                         v-if="modalUser">
                         <p class="text-lg mb-2">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
                         <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
@@ -147,12 +147,14 @@ export default {
             markers: [],
 
             modalUser: null,
-            infoWindowOpen: false,
-            infoWindowPosition: null,
-            infoOptions: {
-                pixelOffset: {
-                    width: 0,
-                    height: -40
+            infoWindow: {
+                open: false,
+                position: null,
+                options: {
+                    pixelOffset: {
+                        width: 0,
+                        height: -40
+                    }
                 }
             }
         }
@@ -231,8 +233,8 @@ export default {
             } else {
                 this.modalUser = user;
             }
-            this.infoWindowOpen = true;
-            this.infoWindowPosition = position
+            this.infoWindow.open = true;
+            this.infoWindow.position = position
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
