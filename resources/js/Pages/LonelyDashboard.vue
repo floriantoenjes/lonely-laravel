@@ -74,8 +74,17 @@
                         :clickable="true"
                         :draggable="false"
                         @click="openChat(m.user.id)"
-                        @mouseover="showPersonDetails($event, m.user)"
+                        @mouseover="showPersonDetails($event, m.user, m.position)"
                     />
+
+                    <GmapInfoWindow
+                        :opened="infoWindowOpen"
+                        :position="infoWindowPosition"
+                        :options="infoOptions"
+                        v-if="modalUser">
+                        <p class="text-lg mb-2">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
+                        <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
+                    </GmapInfoWindow>
                 </GmapMap>
 
                 <div v-if="lonely" class="bg-white p-4 rounded" style="width: max-content; position: absolute; left: 0.5rem; top: 4rem">
@@ -91,11 +100,6 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="my-modal bg-white px-8 py-4 rounded" v-if="showModal" :style="'position: absolute;top:' + modalY + 'px;left:' + modalX + 'px;min-width: 100px;'">
-            <p class="text-center">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
-            <p class="text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
         </div>
 
     </app-layout>
@@ -141,10 +145,16 @@ export default {
             }),
             loading: false,
             markers: [],
-            showModal: false,
-            modalX: 0,
-            modalY: 0,
-            modalUser: null
+
+            modalUser: null,
+            infoWindowOpen: false,
+            infoWindowPosition: null,
+            infoOptions: {
+                pixelOffset: {
+                    width: 0,
+                    height: -40
+                }
+            }
         }
     },
     computed: {
@@ -213,10 +223,7 @@ export default {
                 elements[i].readOnly = true;
             }
         },
-        showPersonDetails(event, user) {
-            const rect = event.vb.target.getBoundingClientRect();
-            this.modalX = rect.x - 40;
-            this.modalY = rect.y - 60;
+        showPersonDetails(event, user, position) {
             if (!user) {
                 this.modalUser = {
                     name: 'You',
@@ -224,7 +231,8 @@ export default {
             } else {
                 this.modalUser = user;
             }
-            this.showModal = true;
+            this.infoWindowOpen = true;
+            this.infoWindowPosition = position
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
