@@ -73,7 +73,7 @@
                         :position="m.position"
                         :clickable="true"
                         :draggable="false"
-                        @click="openChat(m.user.userId)"
+                        @click="openChat(m.user.id)"
                         @mouseover="showPersonDetails($event, m.user)"
                     />
                 </GmapMap>
@@ -94,7 +94,8 @@
         </div>
 
         <div class="my-modal bg-white px-8 py-4 rounded" v-if="showModal" :style="'position: absolute;top:' + modalY + 'px;left:' + modalX + 'px;min-width: 100px;'">
-            <p class="text-center">{{ modalUser.name }}, {{ calculateAge(modalUser.birthdate) }}</p>
+            <p class="text-center">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
+            <p class="text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
         </div>
 
     </app-layout>
@@ -217,7 +218,9 @@ export default {
             this.modalX = rect.x - 40;
             this.modalY = rect.y - 60;
             if (!user) {
-                // this.modalUser = 'You';
+                this.modalUser = {
+                    name: 'You',
+                };
             } else {
                 this.modalUser = user;
             }
