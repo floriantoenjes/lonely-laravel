@@ -21,6 +21,9 @@
 <!--                                <jet-nav-link :href="route('company')" :active="$page.currentRouteName == 'company'">-->
 <!--                                    Company-->
 <!--                                </jet-nav-link>-->
+                                <jet-nav-link href="#">
+                                    News
+                                </jet-nav-link>
                                 <jet-nav-link :href="route('lonely-dashboard')" :active="$page.currentRouteName == 'lonely-dashboard'">
                                     Lonely Dashboard
                                 </jet-nav-link>
@@ -36,6 +39,7 @@
                                 <jet-dropdown align="right" width="48">
                                     <template #trigger>
                                         <button v-if="$page.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <p class="text-lg mr-4 self-center">{{ $page.user.name }}</p>
                                             <img class="h-8 w-8 rounded-full object-cover" :src="$page.user.profile_photo_url" :alt="$page.user.name" />
                                         </button>
 

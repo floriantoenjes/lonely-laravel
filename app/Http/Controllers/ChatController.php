@@ -36,10 +36,23 @@ class ChatController extends Controller
             ])
             ->get();
 
+        $distinctSenderReceiver = ChatMessage::distinct()->select('sender_id', 'receiver_id')->where('sender_id', '=', Auth::id())
+            ->orWhere('receiver_id', '=', Auth::id())->get();
+
+        $distinctContactIds = [];
+        foreach ($distinctSenderReceiver as $senderReceiver) {
+            if (!array_key_exists($senderReceiver->sender_id, $distinctContactIds) && !array_key_exists($senderReceiver->receiver_id, $distinctContactIds)) {
+                $distinctContactIds[] = $senderReceiver->sender_id === Auth::id() ? $senderReceiver->receiver_id : $senderReceiver->sender_id;
+            }
+        }
+
+        $distinctContacts = User::findMany($distinctContactIds);
+
         return Inertia::render('Chat', [
             'currentUser' => Auth::user(),
             'receiver' => User::find($userId),
-            'chatMessages' => $chatMessages
+            'chatMessages' => $chatMessages,
+            'contacts' => $distinctContacts
         ]);
     }
 

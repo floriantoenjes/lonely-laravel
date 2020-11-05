@@ -6,24 +6,39 @@
             </h2>
         </template>
 
-        <div class="flex flex-col">
-            <div class="bg-white m-4 p-16 overflow-scroll" style="height: 75vh">
-                <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
-                    <div class="flex flex-row">
-                        <div style="min-width: 5em; max-width: 5em">
-                            <img class="h-16 rounded block mb-4 block m-auto" v-if="chatMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
-                            <img class="h-16 rounded block mb-4 block m-auto" v-else :src="receiver.profile_photo_url">
-                        </div>
-                        <div class="flex flex-col mb-4">
-                            <div class="flex flex-row">
-                                <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span
-                                    class="font-bold text-lg">You</span> {{ formatTime(chatMessage.created_at) }}: </p>
-                                <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span>
-                                    {{ formatTime(chatMessage.created_at) }}: </p>
+        <div>
+            <div class="flex flex-row">
+                <div class="bg-white m-4 p-16 overflow-scroll w-2/3" style="height: 75vh">
+                    <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
+                        <div class="flex flex-row">
+                            <div style="min-width: 5em; max-width: 5em">
+                                <img class="h-16 rounded block mb-4 block m-auto"
+                                     v-if="chatMessage.sender_id === currentUser.id"
+                                     :src="currentUser.profile_photo_url">
+                                <img class="h-16 rounded block mb-4 block m-auto" v-else
+                                     :src="receiver.profile_photo_url">
                             </div>
-                            <p>{{ chatMessage.chat_message }}</p>
+                            <div class="flex flex-col mb-4">
+                                <div class="flex flex-row">
+                                    <p class="mr-4" v-if="chatMessage.sender_id === currentUser.id"><span
+                                        class="font-bold text-lg">You</span> {{ formatTime(chatMessage.created_at) }}:
+                                    </p>
+                                    <p class="mr-4" v-else><span class="font-bold text-lg">{{ receiver.name }}</span>
+                                        {{ formatTime(chatMessage.created_at) }}: </p>
+                                </div>
+                                <p>{{ chatMessage.chat_message }}</p>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="bg-white m-4 p-16 w-1/3">
+                    <h3 class="text-xl mb-4">Recent Contacts:</h3>
+                    <ul class="list-disc list-inside text-lg">
+                        <li v-for="contact in contacts">
+                            <inertia-link :href="route('chat', contact.id)" class="text-blue-500 hover:text-black">{{ contact.name }}</inertia-link>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -51,7 +66,8 @@ export default {
         },
         'currentUser': {},
         'receiver': {},
-        'chatMessages': {}
+        'chatMessages': {},
+        'contacts': {}
     },
     data() {
         return {
@@ -75,7 +91,7 @@ export default {
     },
     methods: {
         sendChatMessage() {
-            this.form.post(route('send-chat-message', { userId: this.receiver.id }, this.form), {
+            this.form.post(route('send-chat-message', {userId: this.receiver.id}, this.form), {
                 onSuccess: () => {
                     this.scrollToLastMessage();
                 }
