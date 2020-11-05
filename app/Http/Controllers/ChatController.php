@@ -20,7 +20,7 @@ class ChatController extends Controller
         $this->middleware(['auth:sanctum', 'verified']);
     }
 
-    public function chatWithUser($userId)
+    public function chatWithUser($userId = null)
     {
         if ((int)$userId === Auth::user()->getAuthIdentifier()) {
             return Redirect::route('lonely-dashboard');

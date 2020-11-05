@@ -1,8 +1,8 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat with {{ receiver.name }}
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight" v-if="receiver">
+                You are chating with {{ receiver.name }}
             </h2>
         </template>
 
@@ -30,19 +30,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="w-full h-full flex justify-center" v-if="!receiver">
+                        <h2 class="text-2xl text-center self-center">Select a Contact!</h2>
+                    </div>
                 </div>
 
                 <div class="bg-white m-4 p-16 w-1/3">
                     <h3 class="text-xl mb-4">Recent Contacts:</h3>
                     <ul class="list-disc list-inside text-lg">
-                        <li v-for="contact in contacts">
-                            <inertia-link :href="route('chat', contact.id)" class="text-blue-500 hover:text-black">{{ contact.name }}</inertia-link>
+                        <li v-for="contact in contacts" class="mb-4">
+                            <inertia-link :href="route('chat', contact.id)" class="text-blue-500 hover:text-black">
+
+                                <img :src="contact.profile_photo_url" style="max-width: 4rem">
+
+                                {{ contact.name }}
+                            </inertia-link>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4">
+            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4" v-if="receiver">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
                        v-model="form.chatMessageInput"

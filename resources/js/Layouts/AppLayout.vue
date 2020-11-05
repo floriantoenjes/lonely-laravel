@@ -27,7 +27,10 @@
                                 <jet-nav-link :href="route('lonely-dashboard')" :active="$page.currentRouteName == 'lonely-dashboard'">
                                     Lonely Dashboard
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('new-activity-form')":active="$page.curreRouteName == 'new-acitvity-form'">
+                                <jet-nav-link :href="route('chat')" :active="$page.currentRouteName == 'chat'">
+                                    Contacts
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('new-activity-form')" :active="$page.currentRouteName == 'new-activity-form'">
                                     Activities
                                 </jet-nav-link>
                             </div>

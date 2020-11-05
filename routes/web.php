@@ -42,7 +42,7 @@ Route::get('/lonely-dashboard', [DashboardController::class, 'lonelyDashBoard'])
 Route::post('/lonely-dashboard', [DashboardController::class, 'setLonelySettings']);
 Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])->name('lonely-no-more');
 
-Route::get('/chat/{userId}', [ChatController::class, 'chatWithUser'])->name('chat');
+Route::get('/chat/{userId?}', [ChatController::class, 'chatWithUser'])->name('chat');
 Route::post('/chat/{userId}', [ChatController::class, 'sendChatMessage'])->name('send-chat-message');
 
 Route::get('/activity/new', [ActivityController::class, 'newActivity'])->name('new-activity-form');

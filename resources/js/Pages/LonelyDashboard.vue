@@ -179,7 +179,7 @@ export default {
     computed: {
         google: gmapApi,
         zoomLevel: function () {
-            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius)) -1;
+            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius));
         }
     },
     mounted() {
