@@ -85,6 +85,12 @@
                         <p class="text-lg mb-2">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
                         <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
                     </GmapInfoWindow>
+
+                    <GmapCircle
+                        :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
+                        :radius="userLonelySettings.radius * 1000"
+                        :options="circleOptions">
+                    </GmapCircle>
                 </GmapMap>
 
                 <div v-if="lonely" class="bg-white p-4 rounded" style="width: max-content; position: absolute; left: 0.5rem; top: 4rem">
@@ -156,13 +162,18 @@ export default {
                         height: -40
                     }
                 }
+            },
+            circleOptions: {
+                fillOpacity: 0.0,
+                strokeOpacity: 0.2,
+                strokeColor: '#0000FF'
             }
         }
     },
     computed: {
         google: gmapApi,
         zoomLevel: function () {
-            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius));
+            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius)) -1;
         }
     },
     mounted() {
