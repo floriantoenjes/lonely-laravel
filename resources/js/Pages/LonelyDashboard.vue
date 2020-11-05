@@ -6,8 +6,8 @@
             </h2>
         </template>
 
-        <div class="flex flex-row">
-            <div class="m-4 p-16 w-1/4 h-full bg-white">
+        <div class="flex flex-row h-full">
+            <div class="m-4 p-16 w-1/4 bg-white">
                 <form class="flex flex-col" @submit.prevent="updateLonelySettings" id="lonelySettings">
                     <div class="mb-4">
                         <label for="city" class="block mr-4 mb-4">City:</label>
