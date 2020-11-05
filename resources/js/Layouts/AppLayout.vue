@@ -30,7 +30,7 @@
                                 <jet-nav-link :href="route('chat')" :active="$page.currentRouteName == 'chat'">
                                     Contacts
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('new-activity-form')" :active="$page.currentRouteName == 'new-activity-form'">
+                                <jet-nav-link :href="route('new-activity-form')" :active="$page.currentRouteName == 'new-activity-form' || $page.currentRouteName == 'activity-detail'">
                                     Activities
                                 </jet-nav-link>
                             </div>
