@@ -27,20 +27,20 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="radius" class="block mr-4 mb-4">Radius:</label>
+                        <label for="radius" class="block mr-4 mb-4">Radius in km:</label>
                         <input id="radius" class="border rounded w-full" type="text" placeholder=" Radius"
                                v-model="form.radius">
                     </div>
 
                     <div class="mb-4">
                         <label for="age-from" class="block mr-4 mb-4">Age from:</label>
-                        <input id="age-from" class="border rounded w-full" type="text" placeholder=" Radius"
+                        <input id="age-from" class="border rounded w-full" type="text" placeholder=" Age from"
                                v-model="form.ageFrom">
                     </div>
 
                     <div class="mb-4">
                         <label for="age-to" class="block mr-4 mb-4">Age to:</label>
-                        <input id="age-to" class="border rounded w-full" type="text" placeholder=" Radius"
+                        <input id="age-to" class="border rounded w-full" type="text" placeholder=" Age to"
                                v-model="form.ageTo">
                     </div>
 
@@ -66,6 +66,7 @@
                     map-type-id="roadmap"
                     style="width: 100%; height: 100%"
                     v-if="lonely"
+                    :options="mapOptions"
                 >
                     <GmapMarker
                         :key="index"
@@ -93,7 +94,7 @@
                     </GmapCircle>
                 </GmapMap>
 
-                <div v-if="lonely" class="bg-white p-4 rounded" style="width: max-content; position: absolute; left: 0.5rem; top: 4rem">
+                <div v-if="lonely" class="bg-white p-4 rounded" style="width: max-content; position: absolute; left: 0.5rem; top: 2rem">
 
                     <h2 class="text-2xl mb-2" v-if="lonelyPersons.length > 0">Lonely People:</h2>
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
@@ -151,6 +152,11 @@ export default {
             }),
             loading: false,
             markers: [],
+
+            mapOptions: {
+                mapTypeControl: false,
+                streetViewControl: false
+            },
 
             modalUser: null,
             infoWindow: {
