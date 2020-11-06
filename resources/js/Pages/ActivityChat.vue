@@ -118,7 +118,7 @@ export default {
             return moment(createdAt).format('LTS');
         },
         hasUserJoined(userId) {
-            return this.joinedUsers.filter(joinedUser => joinedUser.id === userId).length === 1;
+            return this.joinedUsers.find(joinedUser => joinedUser.id === userId) !== undefined;
         },
         joinActivity() {
             axios.post(`/activity/${this.activity.id}/join`).then(
@@ -132,7 +132,7 @@ export default {
             axios.post(`/activity/${this.activity.id}/leave`).then(
                 response => {
                     if (response.data.left) {
-                        this.joinedUsers.splice(this.joinedUsers.indexOf(this.currentUser), 1);
+                        this.joinedUsers = this.joinedUsers.filter(joinedUser => joinedUser.id !== this.currentUser.id);
                     }
                 });
         },
