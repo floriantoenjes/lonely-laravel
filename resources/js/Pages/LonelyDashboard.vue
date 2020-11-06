@@ -61,12 +61,13 @@
                 <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: calc(15% - 1.5rem)">Are you lonely  today? Mark yourself as lonely!</p>
 
                 <GmapMap
-                    :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
+                    :center="mapCenter"
                     :zoom="zoomLevel"
                     map-type-id="roadmap"
                     style="width: 100%; height: 100%"
                     v-if="lonely"
                     :options="mapOptions"
+                    ref="mainMap"
                 >
                     <GmapMarker
                         :key="index"
@@ -100,7 +101,7 @@
                     <h2 class="text-2xl mb-8" v-else>No one seems to be lonely right now, sorry.</h2>
 
                     <ul class="list-disc list-inside">
-                        <li v-for="lonelyPerson in lonelyPersons" class="mb-2" @click="showPersonDetails($event, lonelyPerson, getPositionFromUser(lonelyPerson))">
+                        <li v-for="lonelyPerson in lonelyPersons" class="mb-2" @click="showPersonDetailsAndPan($event, lonelyPerson, getPositionFromUser(lonelyPerson))">
                             <span class="text-blue-500 hover:text-black cursor-pointer">{{ lonelyPerson.name }}</span>
                         </li>
                     </ul>
@@ -153,6 +154,7 @@ export default {
             loading: false,
             markers: [],
 
+            mapCenter: {lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude},
             mapOptions: {
                 mapTypeControl: false,
                 streetViewControl: false
@@ -238,6 +240,11 @@ export default {
             }
             this.infoWindow.open = true;
             this.infoWindow.position = position
+        },
+        showPersonDetailsAndPan(event, user, position) {
+            console.log(this.$refs);
+            this.$refs.mainMap.panTo(position);
+            this.showPersonDetails(event, user, position);
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
