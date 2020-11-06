@@ -1,26 +1,33 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Activity: {{ activity.name }}
-            </h2>
+            <div class="flex flex-row items-center">
+                <inertia-link class="text-xl mr-4 text-blue-500 hover:text-black" :href="route('new-activity-form')"><-</inertia-link>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Activity: {{ activity.name }}
+                </h2>
+            </div>
         </template>
 
         <div class="flex flex-col">
             <div class="flex flex-row">
                 <div class="bg-white m-4 p-16 overflow-scroll w-2/4" style="height: 75vh">
-                    <div v-if="hasUserJoined($page.user.id)">
-                        <h4 class="text-xl text-center" v-if="activity.activity_messages.length === 0">Be the first to write a message!</h4>
-                        <div v-for="activityMessage in activity.activity_messages" class="messages-div mb-4 overflow-scroll">
+                    <div v-if="hasUserJoined($page.user.id) && activity.activity_messages.length > 0">
+                        <div v-for="activityMessage in activity.activity_messages"
+                             class="messages-div mb-4 overflow-scroll">
                             <div class="flex flex-row">
                                 <div style="min-width: 5em; max-width: 5em">
-                                    <img class="h-16 rounded mb-4 block m-auto" v-if="activityMessage.sender_id === currentUser.id" :src="currentUser.profile_photo_url">
-                                    <img class="h-16 rounded mb-4 block m-auto" v-else :src="activityMessage.sender.profile_photo_url">
+                                    <img class="h-16 rounded mb-4 block m-auto"
+                                         v-if="activityMessage.sender_id === currentUser.id"
+                                         :src="currentUser.profile_photo_url">
+                                    <img class="h-16 rounded mb-4 block m-auto" v-else
+                                         :src="activityMessage.sender.profile_photo_url">
                                 </div>
                                 <div class="flex flex-col mb-4">
                                     <div class="flex flex-row">
                                         <p class="mr-4" v-if="activityMessage.sender_id === currentUser.id"><span
-                                            class="font-bold text-lg">You</span> {{ formatTime(activityMessage.created_at) }}: </p>
+                                            class="font-bold text-lg">You</span> {{
+                                            formatTime(activityMessage.created_at) }}: </p>
                                         <p class="mr-4" v-else><span class="font-bold text-lg">{{ activityMessage.sender.name }}</span>
                                             {{ formatTime(activityMessage.created_at) }}: </p>
                                     </div>
@@ -29,6 +36,10 @@
                             </div>
                         </div>
                     </div>
+                    <div v-else-if="hasUserJoined($page.user.id) && activity.activity_messages.length === 0"
+                         class="flex justify-center items-center h-full">
+                        <h4 class="text-2xl">Be the first to write a message!</h4>
+                    </div>
                     <div v-else class="flex justify-center items-center h-full">
                         <h4 class="text-2xl">Join this activity to organize a meetup!</h4>
                     </div>
@@ -36,7 +47,8 @@
 
                 <div class="bg-white m-4 p-16 overflow-scroll w-2/4 flex flex-col" style="height: 75vh">
                     <!-- TODO: Replace with begin-time -->
-                    <h2 class="text-2xl mb-4 mr-4">{{ activity.name }} <span class="text-base"> at </span><span class="text-blue-500 text-base">14:15 PM</span></h2>
+                    <h2 class="text-2xl mb-4 mr-4">{{ activity.name }} <span class="text-base"> at </span><span
+                        class="text-blue-500 text-base">14:15 PM</span></h2>
                     <div>
                         <img class="h-16 rounded mb-4 mr-4" :src="activity.creator.profile_photo_url">
                     </div>
@@ -50,14 +62,21 @@
                     </ul>
 
                     <div class="mt-auto">
-                        <button v-if="!hasUserJoined($page.user.id)" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="joinActivity()">Join Activity</button>
-                        <button v-else type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="leaveActivity()">Leave Activity</button>
+                        <button v-if="!hasUserJoined($page.user.id)" type="button"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                @click="joinActivity()">Join Activity
+                        </button>
+                        <button v-else type="button"
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                @click="leaveActivity()">Leave Activity
+                        </button>
                     </div>
 
                 </div>
             </div>
 
-            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4">
+            <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4"
+                  v-if="hasUserJoined($page.user.id)">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
                        v-model="form.activityMessageInput"
@@ -71,10 +90,11 @@
 <script>
 import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
+import Button from "../Jetstream/Button";
 
 export default {
     name: "ActivityChat",
-    components: {AppLayout, Label},
+    components: {Button, AppLayout, Label},
     props: {
         'activity': {},
         'currentUser': {},
@@ -99,7 +119,7 @@ export default {
     },
     methods: {
         sendChatMessage() {
-            this.form.post(route('send-activity-message', { activityId: this.activity.id }, this.form), {
+            this.form.post(route('send-activity-message', {activityId: this.activity.id}, this.form), {
                 onSuccess: () => {
                     this.scrollToLastMessage();
                 }
