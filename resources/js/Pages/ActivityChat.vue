@@ -2,8 +2,8 @@
     <app-layout>
         <template #header>
             <div class="flex flex-row items-center">
-                <inertia-link class="text-xl mr-4 text-blue-500 hover:text-black" :href="route('new-activity-form')">
-                    <font-awesome-icon icon="backspace" size="lg"></font-awesome-icon>
+                <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route('new-activity-form')">
+                    <font-awesome-icon icon="arrow-left" size="lg"></font-awesome-icon>
                 </inertia-link>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Activity: {{ activity.name }}
@@ -29,8 +29,10 @@
                                     <div class="flex flex-row">
                                         <p class="mr-4" v-if="activityMessage.sender_id === currentUser.id"><span
                                             class="font-bold text-lg">You</span> {{
-                                            formatTime(activityMessage.created_at) }}: </p>
-                                        <p class="mr-4" v-else><span class="font-bold text-lg">{{ activityMessage.sender.name }}</span>
+                                                formatTime(activityMessage.created_at)
+                                            }}: </p>
+                                        <p class="mr-4" v-else><span
+                                            class="font-bold text-lg">{{ activityMessage.sender.name }}</span>
                                             {{ formatTime(activityMessage.created_at) }}: </p>
                                     </div>
                                     <p>{{ activityMessage.activity_message }}</p>
@@ -58,10 +60,13 @@
                     <h3 class="text-xl mb-4">Description:</h3>
                     <p class="mb-8">{{ activity.description }}</p>
 
-                    <h2 class="text-xl mb-4">Joined users</h2>
-                    <ul class="list-disc list-inside">
-                        <li v-for="joinedUser in joinedUsers">{{ joinedUser.name }}</li>
-                    </ul>
+                    <div v-if="joinedUsers.length > 0">
+                        <h2 class="text-xl mb-4">Joined users</h2>
+                        <ul class="list-disc list-inside">
+                            <li v-for="joinedUser in joinedUsers">{{ joinedUser.name }}</li>
+                        </ul>
+                    </div>
+                    <h2 v-else class="text-xl mb-4"><font-awesome-icon icon="frown-open" size="lg"></font-awesome-icon> No one has joined so far</h2>
 
                     <div class="mt-auto">
                         <button v-if="!hasUserJoined($page.user.id)" type="button"

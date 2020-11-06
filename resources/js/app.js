@@ -10,14 +10,14 @@ import PortalVue from 'portal-vue';
 
 import * as GmapVue from 'gmap-vue';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faBackspace} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft, faFrownOpen} from "@fortawesome/free-solid-svg-icons";
 
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaApp);
 Vue.use(InertiaForm);
 Vue.use(PortalVue);
 
-library.add(faBackspace);
+library.add(faArrowLeft, faFrownOpen);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
