@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div v-else class="flex justify-center items-center h-full">
-                        <h4 class="text-2xl">Join this activity to organize a meetup.</h4>
+                        <h4 class="text-2xl">Join this activity to organize a meetup!</h4>
                     </div>
                 </div>
 
@@ -125,6 +125,7 @@ export default {
                 response => {
                     if (response.data.joined) {
                         this.joinedUsers.push(this.currentUser);
+                        setTimeout(this.scrollToLastMessage);
                     }
                 });
         },

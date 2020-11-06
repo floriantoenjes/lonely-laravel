@@ -77,7 +77,6 @@ export default {
                 city: '',
                 postcode: '',
                 address: ''
-
             }),
         }
     },
