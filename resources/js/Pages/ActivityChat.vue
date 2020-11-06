@@ -2,7 +2,9 @@
     <app-layout>
         <template #header>
             <div class="flex flex-row items-center">
-                <inertia-link class="text-xl mr-4 text-blue-500 hover:text-black" :href="route('new-activity-form')"><-</inertia-link>
+                <inertia-link class="text-xl mr-4 text-blue-500 hover:text-black" :href="route('new-activity-form')">
+                    <font-awesome-icon icon="backspace" size="lg"></font-awesome-icon>
+                </inertia-link>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Activity: {{ activity.name }}
                 </h2>
