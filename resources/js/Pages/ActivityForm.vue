@@ -43,7 +43,6 @@
                     <p class="mt-8 text-lg" v-if="notJoinedActivities.length === 0">There are no other activities set for today!</p>
                     <li v-for="activity in notJoinedActivities" :key="activity.id" class="mb-4">
                         <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
-<!--                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" @click="joinActivity(activity)">Join</button>-->
                     </li>
                 </ul>
             </div>
@@ -53,7 +52,6 @@
                 <ul class="list-disc list-inside text-lg">
                     <li v-for="activity in joinedActivities" :key="activity.id" class="mb-4">
                         <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
-<!--                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" @click="leaveActivity(activity)">Leave</button>-->
                     </li>
                 </ul>
             </div>
@@ -92,25 +90,6 @@ export default {
     methods: {
         createActivity() {
             this.form.post(route('create-activity'), this.form);
-        },
-        joinActivity(activity) {
-            axios.post(`/activity/${activity.id}/join`).then(
-                response => {
-                    if (response.data.joined) {
-                        this.joinedActivities.push(activity);
-                        this.$forceUpdate();
-                    }
-                });
-        },
-        leaveActivity(activity) {
-            // TODO: Fix a bug that's pushing an already left activity twice
-            axios.post(`/activity/${activity.id}/leave`).then(
-                response => {
-                    if (response.data.left) {
-                        this.joinedActivities.splice(this.joinedActivities.indexOf(activity), 1);
-                        this.$forceUpdate();
-                    }
-                });
         },
         formatDateTime(dateTime) {
             return moment(dateTime).format('LT');
