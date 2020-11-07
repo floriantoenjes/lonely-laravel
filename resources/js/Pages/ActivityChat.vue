@@ -5,7 +5,7 @@
                 <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route('new-activity-form')">
                     <font-awesome-icon icon="arrow-left" size="lg"></font-awesome-icon>
                 </inertia-link>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="text-xl text-gray-800 leading-tight">
                     Activity: {{ activity.name }}
                 </h2>
             </div>
