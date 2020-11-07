@@ -42,7 +42,8 @@
                 <ul class="list-disc list-inside text-lg">
                     <p class="mt-8 text-lg" v-if="notJoinedActivities.length === 0">There are no other activities set for today!</p>
                     <li v-for="activity in notJoinedActivities" :key="activity.id" class="mb-4">
-                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+                        <span> in {{ distances[activity.id] }} km</span>
                     </li>
                 </ul>
             </div>
@@ -51,7 +52,8 @@
                 <h2 class="text-2xl mb-8">Joined Activities</h2>
                 <ul class="list-disc list-inside text-lg">
                     <li v-for="activity in joinedActivities" :key="activity.id" class="mb-4">
-                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span class="mr-4">{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
+                        <span> in {{ distances[activity.id] }} km</span>
                     </li>
                 </ul>
             </div>
@@ -67,7 +69,8 @@ export default {
     components: {Button, AppLayout},
     props: {
         activities: {},
-        joinedActivities: {}
+        joinedActivities: {},
+        distances: {}
     },
     data() {
         return {

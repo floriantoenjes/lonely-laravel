@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Events\ActivityMessageReceived;
+use App\Helpers\LonelyHelpers;
 use App\Models\Activity;
 use App\Models\ActivityMessage;
 use Illuminate\Http\Request;
@@ -22,9 +23,21 @@ class ActivityController extends Controller
 
     public function newActivity()
     {
+        $activities = Activity::with('creator')->get();
+        $userLonelySettings = Auth::user()->userLonelySetting()->first();
+
+        $distances = [];
+        foreach ($activities as $activity) {
+            $distance = LonelyHelpers::distFrom($activity->latitude, $activity->longitude, $userLonelySettings->latitude, $userLonelySettings->longitude);
+            $distance = round($distance, 2);
+
+            $distances[$activity->id] = $distance;
+        }
+
         return Inertia::render('ActivityForm', [
-            'activities' => Activity::with('creator')->get(),
-            'joinedActivities' => Auth::user()->joinedActivities()->with('creator')->get()
+            'activities' => $activities,
+            'joinedActivities' => Auth::user()->joinedActivities()->with('creator')->get(),
+            'distances' => $distances
         ]);
     }
 
