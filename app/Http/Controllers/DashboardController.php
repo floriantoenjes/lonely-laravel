@@ -69,7 +69,7 @@ class DashboardController extends Controller
     {
         $address = $request->input('address') . ' ' . $request->input('city') . ' ' . $request->input('postcode');
 
-        $coordinates = $this->getCoordinatesFromAddress($address);
+        $coordinates = LonelyHelpers::getCoordinatesFromAddress($address);
         if ($coordinates === false) {
             return Redirect::route('lonely-dashboard');
         }
@@ -112,22 +112,7 @@ class DashboardController extends Controller
         return $lonely;
     }
 
-    function getCoordinatesFromAddress(string $address) {
-        $prepAddr = str_replace(' ','+',$address);
 
-        $geocodeApiKey = \config('google_api.geocodeApiKey');
-        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='. $prepAddr . '&key=' . $geocodeApiKey);
-
-        $location = json_decode($response->body())->results[0]->geometry->location;
-        $lat = $location->lat;
-        $lng = $location->lng;
-
-        return [
-            'latitude' => $lat,
-            'longitude' => $lng
-        ];
-
-    }
 
     /**
      * @param array $coordinates

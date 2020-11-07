@@ -43,11 +43,9 @@ class ActivityController extends Controller
 
     public function createActivity(Request $request)
     {
-        // TODO: Extract function from DashboardController
-        $coordinates = [
-            'latitude' => '53.044941',
-            'longitude' => '8.517674'
-        ];
+        $address = $request->input('address') . ' ' . $request->input('city') . ' ' . $request->input('postcode');
+
+        $coordinates = LonelyHelpers::getCoordinatesFromAddress($address);
 
         $activity = new Activity();
         $activity->name = $request->input('name');

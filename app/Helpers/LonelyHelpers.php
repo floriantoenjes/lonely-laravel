@@ -4,6 +4,8 @@
 namespace App\Helpers;
 
 
+use Illuminate\Support\Facades\Http;
+
 class LonelyHelpers
 {
     public static function distFrom($lat1, $lng1, $lat2, $lng2)
@@ -20,5 +22,22 @@ class LonelyHelpers
         $dist = $earthRadius * $c;
 
         return $dist / 1000;
+    }
+
+    public static function getCoordinatesFromAddress(string $address) {
+        $prepAddr = str_replace(' ','+',$address);
+
+        $geocodeApiKey = \config('google_api.geocodeApiKey');
+        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?address='. $prepAddr . '&key=' . $geocodeApiKey);
+
+        $location = json_decode($response->body())->results[0]->geometry->location;
+        $lat = $location->lat;
+        $lng = $location->lng;
+
+        return [
+            'latitude' => $lat,
+            'longitude' => $lng
+        ];
+
     }
 }
