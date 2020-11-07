@@ -38,11 +38,11 @@
 
                 <div class="bg-white m-4 p-16 w-1/3">
                     <h3 class="text-xl mb-4">Recent Contacts:</h3>
-                    <ul class="list-disc list-inside text-lg">
+                    <ul class="text-lg">
                         <li v-for="contact in contacts" class="mb-4">
                             <inertia-link :href="route('chat', contact.id)" class="text-blue-500 hover:text-black">
 
-                                <img :src="contact.profile_photo_url" style="max-width: 4rem">
+                                <img :src="contact.profile_photo_url" class="inline mr-2" style="max-width: 4rem">
 
                                 {{ contact.name }}
                             </inertia-link>

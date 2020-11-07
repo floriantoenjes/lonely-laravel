@@ -59,7 +59,7 @@
                     <tbody>
                         <tr v-for="activity in notJoinedActivities" :key="activity.id">
                             <td class="px-4 py-2"><inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link></td>
-                            <td class="px-4 py-2">{{ formatDateTime(activity.created_at) }}</td>
+                            <td class="px-4 py-2" style="width: 104px">{{ formatDateTime(activity.created_at) }}</td>
                             <td class="px-4 py-2">{{ activity.creator.name }}</td>
                             <td class="px-4 py-2">{{ distances[activity.id] }} km</td>
                         </tr>
@@ -87,7 +87,7 @@
                     <tbody>
                     <tr v-for="activity in joinedActivities" :key="activity.id">
                         <td class="px-4 py-2"><inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link></td>
-                        <td class="px-4 py-2">{{ formatDateTime(activity.created_at) }}</td>
+                        <td class="px-4 py-2" style="width: 104px">{{ formatDateTime(activity.created_at) }}</td>
                         <td class="px-4 py-2">{{ activity.creator.name }}</td>
                         <td class="px-4 py-2">{{ distances[activity.id] }} km</td>
                     </tr>
@@ -131,7 +131,7 @@ export default {
             this.form.post(route('create-activity'), this.form);
         },
         formatDateTime(dateTime) {
-            return moment(dateTime).format('LT');
+            return moment(dateTime).format('hh:mm A');
         }
     }
 }
