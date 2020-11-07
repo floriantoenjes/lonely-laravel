@@ -58,7 +58,9 @@
 
             <div class="m-4 w-3/4 h-auto bg-white relative">
 
-                <p v-if="!lonely" class="text-2xl m-auto" style="width: max-content; margin-top: calc(15% - 1.5rem)">Are you lonely  today? Mark yourself as lonely!</p>
+                <div v-if="!lonely" class="h-full flex justify-center items-center">
+                    <p class="text-2xl" style="width: max-content;">Are you lonely  today? Mark yourself as lonely!</p>
+                </div>
 
                 <GmapMap
                     :center="mapCenter"

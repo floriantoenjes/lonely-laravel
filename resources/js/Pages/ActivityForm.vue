@@ -1,7 +1,7 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="text-xl">Current Activities</h2>
+            <h2 class="text-xl">Activities Today</h2>
         </template>
 
         <div class="flex flex-row">

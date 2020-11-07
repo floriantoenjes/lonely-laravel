@@ -14,7 +14,7 @@
         <div class="flex flex-col">
             <div class="flex flex-row">
                 <div class="bg-white m-4 p-16 overflow-scroll w-2/4" style="height: 75vh">
-                    <div v-if="hasUserJoined($page.user.id) && activity.activity_messages.length > 0">
+                    <div v-if="(activity.creator.id === $page.user.id || hasUserJoined($page.user.id)) && activity.activity_messages.length > 0">
                         <div v-for="activityMessage in activity.activity_messages"
                              class="messages-div mb-4 overflow-scroll">
                             <div class="flex flex-row">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else-if="hasUserJoined($page.user.id) && activity.activity_messages.length === 0"
+                    <div v-else-if="(activity.creator.id === $page.user.id || hasUserJoined($page.user.id)) && activity.activity_messages.length === 0"
                          class="flex justify-center items-center h-full">
                         <h4 class="text-2xl">Be the first to write a message!</h4>
                     </div>
@@ -68,7 +68,7 @@
                     </div>
                     <h2 v-else class="text-xl mb-4"><font-awesome-icon icon="frown-open" size="lg"></font-awesome-icon> No one has joined so far</h2>
 
-                    <div class="mt-auto">
+                    <div class="mt-auto" v-if="activity.creator.id !== $page.user.id">
                         <button v-if="!hasUserJoined($page.user.id)" type="button"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 @click="joinActivity()">Join Activity
@@ -83,7 +83,7 @@
             </div>
 
             <form @submit.prevent="sendChatMessage" class="flex flex-row m-4 px-4 mr-4"
-                  v-if="hasUserJoined($page.user.id)">
+                  v-if="(activity.creator.id === $page.user.id || hasUserJoined($page.user.id))">
                 <input id="chatInput" type="text" class="border rounded w-full px-4"
                        placeholder=" Your message goes here..."
                        v-model="form.activityMessageInput"
@@ -116,9 +116,6 @@ export default {
     },
     mounted() {
         Echo.channel(`activity-messages.${this.activity.id}`).listen('ActivityMessageReceived', (e) => {
-            // this.chatMessages.push(e.message);
-            console.log('activityMessage', e);
-            console.log('activityMessage', e.activityMessage.activity_message);
             this.activity.activity_messages.push(e.activityMessage);
             this.scrollToLastMessage();
         });

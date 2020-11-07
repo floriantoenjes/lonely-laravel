@@ -55,7 +55,10 @@ class ActivityController extends Controller
     public function joinActivity($activityId)
     {
         $activity = Activity::find($activityId);
-        $activity->users()->save(Auth::user());
+
+        if (Auth::id() !== $activity->creator_id) {
+            $activity->users()->save(Auth::user());
+        }
 
         return response()->json([
             'joined' => true,
