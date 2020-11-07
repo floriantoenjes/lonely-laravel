@@ -68,7 +68,10 @@
                     map-type-id="roadmap"
                     style="width: 100%; height: 100%"
                     v-if="lonely"
-                    :options="mapOptions"
+                    :options="{
+                        mapTypeControl: false,
+                        streetViewControl: false
+                    }"
                     ref="mainMap"
                 >
                     <GmapMarker
@@ -77,18 +80,28 @@
                         :position="m.position"
                         :clickable="true"
                         :draggable="false"
-                        @click="openChat(m.user.id)"
-                        @mouseover="showPersonDetails($event, m.user, m.position)"
+                        @mouseover="showPersonDetails($event, m.user)"
                     />
+
+                    <GmapMarker
+                        :key="'a' + index"
+                        v-for="(m, index) in activityMarkers"
+                        :position="m.position"
+                        :clickable="true"
+                        :draggable="false"
+                        :icon="{ url: 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png' }"
+                        @mouseover="showActivityDetails($event, m.activity, m.position)"
+                    />
+
 
                     <GmapInfoWindow
                         :key="'i' + index"
                         v-for="(m, index) in markers"
-                        :opened="infoWindow.open === m.user.id"
+                        :opened="infoWindow.openedId === m.user.id"
                         :position="m.position"
                         :options="infoWindow.options"
                         v-if="m.user">
-                        <div v-if="m.user.id !== $page.user.id">
+                        <div v-if="m.user.id !== $page.user.id" style="max-width: 192px">
                             <p class="text-lg mb-2">{{ m.user.name }}<span v-if="m.user.birthdate">, {{ calculateAge(m.user.birthdate) }}</span></p>
                             <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(m.user.id)" v-if="m.user.id">Chat</p>
                         </div>
@@ -97,10 +110,30 @@
                         </div>
                     </GmapInfoWindow>
 
+                    <GmapInfoWindow
+                        :key="'ai' + index"
+                        v-for="(m, index) in activityMarkers"
+                        :opened="infoWindow.openedId === 'a' + m.activity.id"
+                        :position="m.position"
+                        :options="infoWindow.options"
+                        v-if="m.activity">
+                        <div style="max-width: 192px">
+                            <p class="text-lg mb-2">{{ m.activity.name }}</p>
+                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openActivity(m.activity.id)">Details</p>
+                        </div>
+                    </GmapInfoWindow>
+
                     <GmapCircle
-                        :center="{lat: +userLonelySettings.latitude, lng: +userLonelySettings.longitude}"
+                        :center="{
+                            lat: +userLonelySettings.latitude,
+                            lng: +userLonelySettings.longitude
+                        }"
                         :radius="userLonelySettings.radius * 1000"
-                        :options="circleOptions">
+                        :options="{
+                            fillOpacity: 0.0,
+                            strokeOpacity: 0.2,
+                            strokeColor: '#0000FF'
+                        }">
                     </GmapCircle>
                 </GmapMap>
 
@@ -146,10 +179,13 @@ export default {
     props: {
         'lonely': {},
         'userLonelySettings': {},
-        'lonelyPersons': {}
+        'lonelyPersons': {},
+        'activities': {}
     },
     data() {
         return {
+            loading: false,
+
             form: this.$inertia.form({
                 city: this.userLonelySettings?.city,
                 postcode: this.userLonelySettings?.postcode,
@@ -160,30 +196,19 @@ export default {
             }, {
                 resetOnSuccess: false
             }),
-            loading: false,
+
+            mapCenter: { lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude },
             markers: [],
+            activityMarkers: [],
 
-            mapCenter: {lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude},
-            mapOptions: {
-                mapTypeControl: false,
-                streetViewControl: false
-            },
-
-            modalUser: null,
             infoWindow: {
-                open: -1,
-                position: null,
+                openedId: -1,
                 options: {
                     pixelOffset: {
                         width: 0,
                         height: -40
                     }
                 }
-            },
-            circleOptions: {
-                fillOpacity: 0.0,
-                strokeOpacity: 0.2,
-                strokeColor: '#0000FF'
             }
         }
     },
@@ -197,57 +222,63 @@ export default {
         Inertia.on('start', event => {
             this.loading = true;
         });
-
         Inertia.on('finish', event => {
             this.loading = false;
         });
-
-        this.generateMarkers();
 
         if (this.lonely) {
             this.disableSettingsForm();
         } else {
             this.enableSettingsForm();
         }
+
+        this.generateMarkers();
+        this.generateActivityMarkers();
     },
     methods: {
         updateLonelySettings() {
             if (!this.lonely) {
-                this.form.post(route('lonely-dashboard', this.form)).then(() => this.generateMarkers());
+                this.form.post(route('lonely-dashboard', this.form)).then(() => {
+                    this.generateMarkers();
+                    this.generateActivityMarkers();
+                });
                 this.disableSettingsForm();
             } else if (this.lonely) {
                 this.form.post(route('lonely-no-more'));
                 this.enableSettingsForm();
             }
         },
-        openChat(userId) {
-            if (userId !== undefined) {
-                this.$inertia.get(`/chat/${userId}`);
-            }
-        },
         enableSettingsForm() {
             const form = document.getElementById('lonelySettings');
             const elements = form.elements;
-            for (var i = 0, len = elements.length; i < len; ++i) {
-                elements[i].readOnly = false;
+            for (const element of elements) {
+                element.readOnly = false;
             }
         },
         disableSettingsForm() {
             const form = document.getElementById('lonelySettings');
             const elements = form.elements;
-            for (var i = 0, len = elements.length; i < len; ++i) {
-                elements[i].readOnly = true;
+            for (const element of elements) {
+                element.readOnly = true;
             }
         },
-        showPersonDetails(event, user, position) {
-            this.modalUser = user;
-            this.infoWindow.open = user.id;
-            this.infoWindow.position = position
+        showPersonDetails(event, user) {
+            this.infoWindow.openedId = user.id;
         },
         showPersonDetailsAndPan(event, user, position) {
-            console.log(this.$refs);
             this.$refs.mainMap.panTo(position);
-            this.showPersonDetails(event, user, position);
+            this.showPersonDetails(event, user);
+        },
+        openChat(userId) {
+            if (userId !== undefined) {
+                this.$inertia.get(`/chat/${userId}`);
+            }
+        },
+        showActivityDetails($event, activity) {
+            this.infoWindow.openedId = 'a' + activity.id;
+        },
+        openActivity(id) {
+            this.$inertia.get(`activity/${id}`);
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
@@ -261,19 +292,26 @@ export default {
                 for (const lonelyPerson of this.lonelyPersons) {
                     this.markers.push({
                         position: new google.maps.LatLng({ lat: +lonelyPerson.user_lonely_setting.latitude, lng: +lonelyPerson.user_lonely_setting.longitude}),
-                        weight: 50,
-                        // userId: lonelyPerson.id,
-                        // username: lonelyPerson.name,
                         user: lonelyPerson
                     });
                 }
                 this.markers.push({
                     position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
-                    weight: 100,
                     user: this.$page.user
                 })
             });
-        }
+        },
+        generateActivityMarkers() {
+            this.activityMarkers = [];
+            this.$gmapApiPromiseLazy().then(() => {
+                for (const activity of this.activities) {
+                    this.activityMarkers.push({
+                        position: new google.maps.LatLng({ lat: +activity.latitude, lng: +activity.longitude}),
+                        activity: activity
+                    });
+                }
+            });
+        },
     }
 }
 </script>

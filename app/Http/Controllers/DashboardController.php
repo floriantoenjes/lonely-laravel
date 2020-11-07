@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Helpers\LonelyHelpers;
+use App\Models\Activity;
 use App\Models\User;
 use App\Models\UserLonelySetting;
 use DateTime;
@@ -61,7 +62,8 @@ class DashboardController extends Controller
             'userLonelySettings' => $currentUserLonelySettings,
             'success' => true,
             'lonely' => $lonely,
-            'lonelyPersons' => $lonelyPersons
+            'lonelyPersons' => $lonelyPersons,
+            'activities' => Activity::all()
         ]);
     }
 
