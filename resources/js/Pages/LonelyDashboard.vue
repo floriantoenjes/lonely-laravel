@@ -82,12 +82,19 @@
                     />
 
                     <GmapInfoWindow
-                        :opened="infoWindow.open"
-                        :position="infoWindow.position"
+                        :key="'i' + index"
+                        v-for="(m, index) in markers"
+                        :opened="infoWindow.open === m.user.id"
+                        :position="m.position"
                         :options="infoWindow.options"
-                        v-if="modalUser">
-                        <p class="text-lg mb-2">{{ modalUser.name }}<span v-if="modalUser.birthdate">, {{ calculateAge(modalUser.birthdate) }}</span></p>
-                        <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(modalUser.id)" v-if="modalUser.id">Chat</p>
+                        v-if="m.user">
+                        <div v-if="m.user.id !== $page.user.id">
+                            <p class="text-lg mb-2">{{ m.user.name }}<span v-if="m.user.birthdate">, {{ calculateAge(m.user.birthdate) }}</span></p>
+                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(m.user.id)" v-if="m.user.id">Chat</p>
+                        </div>
+                        <div v-else>
+                            <p class="text-lg mb-2">You</p>
+                        </div>
                     </GmapInfoWindow>
 
                     <GmapCircle
@@ -164,7 +171,7 @@ export default {
 
             modalUser: null,
             infoWindow: {
-                open: false,
+                open: -1,
                 position: null,
                 options: {
                     pixelOffset: {
@@ -233,14 +240,8 @@ export default {
             }
         },
         showPersonDetails(event, user, position) {
-            if (!user) {
-                this.modalUser = {
-                    name: 'You',
-                };
-            } else {
-                this.modalUser = user;
-            }
-            this.infoWindow.open = true;
+            this.modalUser = user;
+            this.infoWindow.open = user.id;
             this.infoWindow.position = position
         },
         showPersonDetailsAndPan(event, user, position) {
@@ -268,7 +269,8 @@ export default {
                 }
                 this.markers.push({
                     position: new google.maps.LatLng({ lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude}),
-                    weight: 100
+                    weight: 100,
+                    user: this.$page.user
                 })
             });
         }
