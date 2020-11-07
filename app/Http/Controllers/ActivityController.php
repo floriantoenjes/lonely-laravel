@@ -29,7 +29,7 @@ class ActivityController extends Controller
         $distances = [];
         foreach ($activities as $activity) {
             $distance = LonelyHelpers::distFrom($activity->latitude, $activity->longitude, $userLonelySettings->latitude, $userLonelySettings->longitude);
-            $distance = round($distance, 2);
+            $distance = round($distance, 1);
 
             $distances[$activity->id] = $distance;
         }

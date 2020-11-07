@@ -37,25 +37,62 @@
                 </button>
             </form>
 
-            <div class="m-4 p-16 w-1/3 bg-white">
-                <h2 class="text-2xl mb-8">Available Activities</h2>
-                <ul class="list-disc list-inside text-lg">
-                    <p class="mt-8 text-lg" v-if="notJoinedActivities.length === 0">There are no other activities set for today!</p>
-                    <li v-for="activity in notJoinedActivities" :key="activity.id" class="mb-4">
-                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
-                        <span> in {{ distances[activity.id] }} km</span>
-                    </li>
-                </ul>
+            <div class="m-4 p-8 w-1/3 bg-white">
+                <h2 class="text-2xl mb-8 pl-8">Available Activities</h2>
+<!--                <ul class="list-disc list-inside text-lg">-->
+<!--                    <p class="mt-8 text-lg" v-if="notJoinedActivities.length === 0">There are no other activities set for today!</p>-->
+<!--                    <li v-for="activity in notJoinedActivities" :key="activity.id" class="mb-4">-->
+<!--                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>-->
+<!--                        <span> in {{ distances[activity.id] }} km</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">When</th>
+                            <th class="px-4 py-2">Creator</th>
+                            <th class="px-4 py-2">Distance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="activity in notJoinedActivities" :key="activity.id">
+                            <td class="px-4 py-2"><inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link></td>
+                            <td class="px-4 py-2">{{ formatDateTime(activity.created_at) }}</td>
+                            <td class="px-4 py-2">{{ activity.creator.name }}</td>
+                            <td class="px-4 py-2">{{ distances[activity.id] }} km</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="m-4 p-16 w-1/3 bg-white">
-                <h2 class="text-2xl mb-8">Joined Activities</h2>
-                <ul class="list-disc list-inside text-lg">
-                    <li v-for="activity in joinedActivities" :key="activity.id" class="mb-4">
-                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>
-                        <span> in {{ distances[activity.id] }} km</span>
-                    </li>
-                </ul>
+            <div class="m-4 p-8 w-1/3 bg-white">
+                <h2 class="text-2xl mb-8 pl-8">Joined Activities</h2>
+<!--                <ul class="list-disc list-inside text-lg">-->
+<!--                    <li v-for="activity in joinedActivities" :key="activity.id" class="mb-4">-->
+<!--                        <inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link> at <span>{{ formatDateTime(activity.created_at) }} by {{ activity.creator.name }}</span>-->
+<!--                        <span> in {{ distances[activity.id] }} km</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+                <table class="table-auto w-full">
+                    <thead>
+                    <tr>
+                        <th class="px-4 py-2">Name</th>
+                        <th class="px-4 py-2">When</th>
+                        <th class="px-4 py-2">Creator</th>
+                        <th class="px-4 py-2">Distance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="activity in joinedActivities" :key="activity.id">
+                        <td class="px-4 py-2"><inertia-link :href="route('activity-detail', activity.id)" class="text-blue-500 hover:text-black">{{ activity.name }}</inertia-link></td>
+                        <td class="px-4 py-2">{{ formatDateTime(activity.created_at) }}</td>
+                        <td class="px-4 py-2">{{ activity.creator.name }}</td>
+                        <td class="px-4 py-2">{{ distances[activity.id] }} km</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </app-layout>
