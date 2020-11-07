@@ -103,7 +103,10 @@
                         v-if="m.user">
                         <div v-if="m.user.id !== $page.user.id" style="max-width: 192px">
                             <p class="text-lg mb-2">{{ m.user.name }}<span v-if="m.user.birthdate">, {{ calculateAge(m.user.birthdate) }}</span></p>
-                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(m.user.id)" v-if="m.user.id">Chat</p>
+                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openChat(m.user.id)" v-if="m.user.id">
+                                <font-awesome-icon :icon="['far', 'comments']" size="lg"></font-awesome-icon>
+                                Chat
+                            </p>
                         </div>
                         <div v-else>
                             <p class="text-lg mb-2">You</p>

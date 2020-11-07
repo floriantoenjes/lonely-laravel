@@ -66,7 +66,7 @@
                             <li v-for="joinedUser in joinedUsers">{{ joinedUser.name }}</li>
                         </ul>
                     </div>
-                    <h2 v-else class="text-xl mb-4"><font-awesome-icon icon="frown-open" size="lg"></font-awesome-icon> No one has joined so far</h2>
+                    <h2 v-else class="text-xl mb-4"><font-awesome-icon :icon="['far', 'frown-open']" size="lg"></font-awesome-icon> No one has joined so far</h2>
 
                     <div class="mt-auto" v-if="activity.creator.id !== $page.user.id">
                         <button v-if="!hasUserJoined($page.user.id)" type="button"
