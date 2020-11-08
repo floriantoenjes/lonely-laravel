@@ -122,7 +122,10 @@
                         v-if="m.activity">
                         <div style="max-width: 192px">
                             <p class="text-lg mb-2">{{ m.activity.name }}</p>
-                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openActivity(m.activity.id)">Details</p>
+                            <p class="text-lg text-blue-500 hover:text-black cursor-pointer text-center" @click="openActivity(m.activity.id)">
+                                <font-awesome-icon icon="info-circle" size="lg"></font-awesome-icon>
+                                Details
+                            </p>
                         </div>
                     </GmapInfoWindow>
 

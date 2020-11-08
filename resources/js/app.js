@@ -10,7 +10,7 @@ import PortalVue from 'portal-vue';
 
 import * as GmapVue from 'gmap-vue';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft, faInfoCircle} from "@fortawesome/free-solid-svg-icons";
 import {faComments, faFrownOpen} from "@fortawesome/free-regular-svg-icons";
 
 
@@ -22,6 +22,7 @@ Vue.use(PortalVue);
 library.add(
     faArrowLeft,
     faComments,
+    faInfoCircle,
     faFrownOpen
 );
 
