@@ -2,7 +2,7 @@
     <app-layout>
         <template #header>
             <div class="flex flex-row items-center">
-                <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route('new-activity-form')">
+                <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route(prevRouteIfExists('new-activity-form'))">
                     <font-awesome-icon icon="arrow-left" size="lg"></font-awesome-icon>
                 </inertia-link>
                 <h2 class="text-xl text-gray-800 leading-tight">
@@ -161,6 +161,16 @@ export default {
                     }
                 });
         },
+        prevRouteIfExists(route) {
+            const prevRoute = new URL(location.href).searchParams.get('prevRoute');
+            console.log(prevRoute);
+            if (prevRoute) {
+                return prevRoute;
+            } else {
+                console.log(route);
+                return route;
+            }
+        }
     }
 }
 </script>

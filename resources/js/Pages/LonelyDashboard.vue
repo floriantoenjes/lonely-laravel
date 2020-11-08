@@ -274,14 +274,14 @@ export default {
         },
         openChat(userId) {
             if (userId !== undefined) {
-                this.$inertia.get(`/chat/${userId}`);
+                this.$inertia.get(`/chat/${userId}`, { prevRoute: 'lonely-dashboard'});
             }
         },
         showActivityDetails($event, activity) {
             this.infoWindow.openedId = 'a' + activity.id;
         },
         openActivity(id) {
-            this.$inertia.get(`activity/${id}`);
+            this.$inertia.get(`activity/${id}`, { prevRoute: 'lonely-dashboard'});
         },
         calculateAge(birthdate) {
             return moment().diff(birthdate, 'years');
