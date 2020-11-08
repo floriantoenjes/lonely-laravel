@@ -5,7 +5,7 @@
                 <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route(prevRouteIfExists('new-activity-form'))">
                     <font-awesome-icon icon="arrow-left" size="lg"></font-awesome-icon>
                 </inertia-link>
-                <h2 class="text-xl text-gray-800 leading-tight">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Activity: {{ activity.name }}
                 </h2>
             </div>
@@ -98,10 +98,14 @@
 import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
 import Button from "../Jetstream/Button";
+import PrevRouteCapability from "../Mixins/PrevRouteCapability";
 
 export default {
     name: "ActivityChat",
     components: {Button, AppLayout, Label},
+    mixins: [
+        PrevRouteCapability
+    ],
     props: {
         'activity': {},
         'currentUser': {},
@@ -160,16 +164,6 @@ export default {
                         this.joinedUsers = this.joinedUsers.filter(joinedUser => joinedUser.id !== this.currentUser.id);
                     }
                 });
-        },
-        prevRouteIfExists(route) {
-            const prevRoute = new URL(location.href).searchParams.get('prevRoute');
-            console.log(prevRoute);
-            if (prevRoute) {
-                return prevRoute;
-            } else {
-                console.log(route);
-                return route;
-            }
         }
     }
 }

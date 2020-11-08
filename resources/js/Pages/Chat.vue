@@ -1,9 +1,14 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight" v-if="receiver">
-                You are chatting with {{ receiver.name }}
-            </h2>
+            <div class="flex flex-row items-center" v-if="receiver">
+                <inertia-link class="text-xl mr-8 text-blue-500 hover:text-black" :href="route(prevRouteIfExists('chat'))">
+                    <font-awesome-icon icon="arrow-left" size="lg"></font-awesome-icon>
+                </inertia-link>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    You are chatting with {{ receiver.name }}
+                </h2>
+            </div>
         </template>
 
         <div>
@@ -65,10 +70,14 @@
 <script>
 import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
+import PrevRouteCapability from "../Mixins/PrevRouteCapability";
 
 export default {
     name: "Chat",
     components: {AppLayout, Label},
+    mixins: [
+        PrevRouteCapability
+    ],
     props: {
         'userId': {
             type: String
