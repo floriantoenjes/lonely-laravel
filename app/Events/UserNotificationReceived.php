@@ -21,6 +21,10 @@ class UserNotificationReceived implements ShouldBroadcast
 
     public $message;
 
+    public $senderId;
+
+    public $activityId;
+
     /**
      * Create a new event instance.
      *
@@ -31,6 +35,8 @@ class UserNotificationReceived implements ShouldBroadcast
         $this->userId = $userNotification->getUserId();
         $this->type = $userNotification->getType();
         $this->message = $userNotification->getMessage();
+        $this->senderId = $userNotification->getSenderId();
+        $this->activityId = $userNotification->getActivityId();
     }
 
     /**

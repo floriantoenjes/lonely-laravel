@@ -12,6 +12,10 @@ class UserNotification
 
     private $message = '';
 
+    private $senderId = -1;
+
+    private $activityId = -1;
+
     /**
      * @return int
      */
@@ -62,6 +66,42 @@ class UserNotification
         $this->message = $message;
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getSenderId(): int
+    {
+        return $this->senderId;
+    }
+
+    /**
+     * @param int $senderId
+     */
+    public function setSenderId(int $senderId): UserNotification
+    {
+        $this->senderId = $senderId;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getActivityId(): int
+    {
+        return $this->activityId;
+    }
+
+    /**
+     * @param int $activityId
+     */
+    public function setActivityId(int $activityId): UserNotification
+    {
+        $this->activityId = $activityId;
+        return $this;
+    }
+
+
 
 
 }

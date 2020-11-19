@@ -131,7 +131,9 @@
 
                                 <template #content>
                                     <div v-for="userNotification in userNotifications" class="p-0.5">
-                                        <p class="text-center">{{ userNotification.message }}</p>
+                                        <inertia-link :href="route('chat', { userId: userNotification.senderId })">
+                                            <p class="text-center">{{ userNotification.message }}</p>
+                                        </inertia-link>
                                     </div>
                                 </template>
                             </jet-dropdown>
