@@ -145,7 +145,8 @@ export default {
             return moment(createdAt).format('LTS');
         },
         messageScroll(event) {
-            this.showScrollCue = event.srcElement.scrollTop < this.$refs.chatMessage[0].clientHeight * this.$refs.chatMessage.length;
+            this.showScrollCue = event.srcElement.scrollTop + 300 < this.$refs.chatMessage[0].clientHeight * (this.$refs.chatMessage.length - 1);
+            // console.log(this.showScrollCue, event.srcElement.scrollTop, this.$refs.chatMessage[0].clientHeight * (this.$refs.chatMessage.length - 1));
         }
     }
 }
