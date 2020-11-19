@@ -287,6 +287,12 @@
             path() {
                 return window.location.pathname
             }
+        },
+
+        mounted() {
+            Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (e) => {
+                alert('User Notification', e);
+            });
         }
     }
 </script>
