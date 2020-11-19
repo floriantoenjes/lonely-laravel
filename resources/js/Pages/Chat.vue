@@ -112,17 +112,19 @@ export default {
         }
     },
     mounted() {
-        const firstUserId = Math.min(+this.currentUser.id, +this.receiver.id);
-        const secondUserId = Math.max(+this.currentUser.id, +this.receiver.id);
+        if (this.receiver) {
+            const firstUserId = Math.min(+this.currentUser.id, +this.receiver.id);
+            const secondUserId = Math.max(+this.currentUser.id, +this.receiver.id);
 
-        console.log('WS connection', `messages.${firstUserId}.${secondUserId}`);
+            console.log('WS connection', `messages.${firstUserId}.${secondUserId}`);
 
-        Echo.channel(`messages.${firstUserId}.${secondUserId}`).listen('MessageReceived', (e) => {
-            this.chatMessages.push(e.message);
+            Echo.channel(`messages.${firstUserId}.${secondUserId}`).listen('MessageReceived', (e) => {
+                this.chatMessages.push(e.message);
+                this.scrollToLastMessage();
+            });
+
             this.scrollToLastMessage();
-        });
-
-        this.scrollToLastMessage();
+        }
     },
     methods: {
         sendChatMessage() {

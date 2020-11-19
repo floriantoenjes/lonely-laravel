@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 
 
 use App\Events\ActivityMessageReceived;
+use App\Events\UserNotificationReceived;
 use App\Helpers\LonelyHelpers;
 use App\Models\Activity;
 use App\Models\ActivityMessage;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -108,6 +110,21 @@ class ActivityController extends Controller
         $activityMessage->save();
 
         $activityMessageWithSender = ActivityMessage::with('sender')->find($activityMessage->id);
+
+        $activity = Activity::find($activityId);
+        $userNotificationMessage = 'Chat Message in ' . $activity->name;
+
+        foreach ($activity->users as $user) {
+            $userNotification = new UserNotification();
+            $userNotification->user_id = $user->id;
+            $userNotification->sender_id = Auth::id();
+            $userNotification->activity_id = $activityId;
+            $userNotification->message = $userNotificationMessage;
+            $userNotification->type = 'activityMessage';
+
+            event(new UserNotificationReceived($userNotification));
+            $userNotification->save();
+        }
 
         event(new ActivityMessageReceived($activityMessageWithSender));
 

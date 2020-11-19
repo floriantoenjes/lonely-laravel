@@ -131,7 +131,11 @@
 
                                 <template #content v-if="userNotifications.length > 0">
                                     <div v-for="userNotification in userNotifications" class="p-2">
-                                        <inertia-link :href="route('chat', { userId: userNotification.senderId })">
+                                        <inertia-link v-if="!userNotification.activity_id" :href="route('chat', { userId: userNotification.sender_id })">
+                                            <p>{{ userNotification.message }}</p>
+                                        </inertia-link>
+
+                                        <inertia-link v-else :href="route('activity-detail', { activityId: userNotification.activity_id })">
                                             <p>{{ userNotification.message }}</p>
                                         </inertia-link>
                                         <hr>
@@ -320,7 +324,9 @@
             });
 
             Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (userNotification) => {
-                this.userNotifications.push(userNotification);
+                if (userNotification.senderId !== this.$page.user.id) {
+                    this.userNotifications.push(userNotification);
+                }
             });
         }
     }
