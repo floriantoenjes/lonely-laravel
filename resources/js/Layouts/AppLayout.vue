@@ -121,10 +121,20 @@
                                 </div>
                             </div>
 
-                            <div class="cursor-pointer hover:text-blue-500">
-                                <div class="bg-red-500 text-white rounded-full w-5 h-5 text-center absolute" style="margin-top: -8px; margin-left: 8px" v-if="userNotifications.length > 0">{{ userNotifications.length }}</div>
-                                <font-awesome-icon :icon="['far', 'bell']" size="lg"></font-awesome-icon>
-                            </div>
+                            <jet-dropdown align="right" width="48">
+                                <template #trigger>
+                                    <div class="cursor-pointer hover:text-blue-500">
+                                        <div class="bg-red-500 text-white rounded-full w-5 h-5 text-center absolute" style="margin-top: -8px; margin-left: 8px" v-if="userNotifications.length > 0">{{ userNotifications.length }}</div>
+                                        <font-awesome-icon :icon="['far', 'bell']" size="lg"></font-awesome-icon>
+                                    </div>
+                                </template>
+
+                                <template #content>
+                                    <div v-for="userNotification in userNotifications" class="p-0.5">
+                                        <p class="text-center">{{ userNotification.message }}</p>
+                                    </div>
+                                </template>
+                            </jet-dropdown>
 
                         </div>
 
