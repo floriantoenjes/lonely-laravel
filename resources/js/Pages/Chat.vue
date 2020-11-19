@@ -47,12 +47,12 @@
                 </div>
 
                 <div class="bg-white m-4 p-16 w-1/3 flex flex-col">
-                    <div class="flex flex-row items-center mb-4">
+                    <div class="flex flex-row items-center mb-4" v-if="receiver">
                         <img class="h-16 rounded block mb-4 mr-4 w-16"
                              :src="receiver.profile_photo_url">
                         <h3 class="text-2xl mb-4 mr-8">{{ receiver.name }}</h3>
                     </div>
-                    <div class="mb-16">
+                    <div class="mb-16" v-if="receiver">
                         <button type="button" class="bg-yellow-300 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded mr-4">Ignore User</button>
                         <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Report User</button>
                     </div>
