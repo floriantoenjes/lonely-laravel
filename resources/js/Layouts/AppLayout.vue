@@ -306,6 +306,10 @@
         },
 
         mounted() {
+            axios.get('/user-notifications').then(response => {
+                this.userNotifications = response.data.userNotifications;
+            });
+
             Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (userNotification) => {
                 this.userNotifications.push(userNotification);
             });

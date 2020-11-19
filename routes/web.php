@@ -52,3 +52,5 @@ Route::post('/activity/{activityId}/join', [ActivityController::class, 'joinActi
 Route::post('/activity/{activityId}/leave', [ActivityController::class, 'leaveActivity'])->name('leave-activity');
 Route::get('/activity/{activityId}',  [ActivityController::class, 'activityDetail'])->name('activity-detail');
 Route::post('/activity/{activityId}',  [ActivityController::class, 'sendActivityMessage'])->name('send-activity-message');
+
+Route::get('/user-notifications', [\App\Http\Controllers\UserNotificationController::class, 'getUserNotifications'])->name('user-notifications');

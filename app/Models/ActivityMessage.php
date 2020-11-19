@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|ActivityMessage whereSenderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ActivityMessage whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\User $sender
  */
 class ActivityMessage extends Model
 {

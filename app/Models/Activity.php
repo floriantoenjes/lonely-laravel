@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ActivityMessage[] $activityMessages
+ * @property-read int|null $activity_messages_count
+ * @property-read \App\Models\User $creator
  */
 class Activity extends Model
 {
