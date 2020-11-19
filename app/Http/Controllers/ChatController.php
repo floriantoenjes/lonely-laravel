@@ -48,6 +48,10 @@ class ChatController extends Controller
 
         $distinctContacts = User::findMany($distinctContactIds);
 
+        $distinctContacts = $distinctContacts->filter(function ($contact) use ($userId) {
+            return $contact->id !== (int) $userId;
+        });
+
         return Inertia::render('Chat', [
             'currentUser' => Auth::user(),
             'receiver' => User::find($userId),
