@@ -55,7 +55,7 @@
                     </button>
 
                     <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
-                            @click="refreshDashBoard">
+                            @click="refreshDashBoard" v-if="lonely">
                         Refresh
                         <font-awesome-icon icon="sync" class="ml-4" size="lg" :spin="refreshing"></font-awesome-icon>
                     </button>
@@ -345,6 +345,8 @@ export default {
 
                 this.generateMarkers();
                 this.generateActivityMarkers();
+
+                this.infoWindow.openedId = null;
 
                 setTimeout(() => {
                     this.refreshing = false;
