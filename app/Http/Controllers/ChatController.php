@@ -82,6 +82,8 @@ class ChatController extends Controller
         event(new UserNotificationReceived($userNotification));
         $userNotification->save();
 
+        event(new MessageReceived($chatMessage));
+
         return Redirect::route('chat', [
             'userId' => $userId
         ]);
