@@ -41,7 +41,17 @@
                     </div>
                 </div>
 
-                <div class="bg-white m-4 p-16 w-1/3">
+                <div class="bg-white m-4 p-16 w-1/3 flex flex-col">
+                    <div class="flex flex-row items-center">
+                        <img class="h-16 rounded block mb-4 mr-4 w-16"
+                             :src="receiver.profile_photo_url">
+                        <h3 class="text-2xl mb-4 mr-8">{{ receiver.name }}</h3>
+                    </div>
+                    <div class="mb-16">
+                        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4">Report User</button>
+                        <button type="button" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Ignore User</button>
+                    </div>
+
                     <h3 class="text-xl mb-4">Recent Contacts:</h3>
                     <ul class="text-lg">
                         <li v-for="contact in contacts" class="mb-4">
