@@ -10,7 +10,7 @@ import PortalVue from 'portal-vue';
 
 import * as GmapVue from 'gmap-vue';
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faArrowLeft, faInfoCircle, faSync} from "@fortawesome/free-solid-svg-icons";
+import {faAngleDown, faArrowLeft, faInfoCircle, faSync} from "@fortawesome/free-solid-svg-icons";
 import {faBell, faComments, faFrownOpen} from "@fortawesome/free-regular-svg-icons";
 
 import GoogleMapCluster from 'gmap-vue/dist/components/cluster';
@@ -21,6 +21,7 @@ Vue.use(InertiaForm);
 Vue.use(PortalVue);
 
 library.add(
+    faAngleDown,
     faArrowLeft,
     faBell,
     faComments,

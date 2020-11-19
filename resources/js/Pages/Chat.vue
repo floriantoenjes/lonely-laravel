@@ -39,6 +39,10 @@
                     <div class="w-full h-full flex justify-center" v-if="!receiver">
                         <h2 class="text-2xl text-center self-center">Select a Contact!</h2>
                     </div>
+
+                    <button type="button" class="sticky bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="bottom: -1rem; left: 98%" @click="scrollToLastMessage">
+                        <font-awesome-icon icon="angle-down" size="lg"></font-awesome-icon>
+                    </button>
                 </div>
 
                 <div class="bg-white m-4 p-16 w-1/3 flex flex-col">
@@ -81,10 +85,11 @@
 import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
 import PrevRouteCapability from "../Mixins/PrevRouteCapability";
+import Button from "../Jetstream/Button";
 
 export default {
     name: "Chat",
-    components: {AppLayout, Label},
+    components: {Button, AppLayout, Label},
     mixins: [
         PrevRouteCapability
     ],

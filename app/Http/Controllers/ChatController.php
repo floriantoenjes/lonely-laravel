@@ -29,7 +29,7 @@ class ChatController extends Controller
         $chatMessages = ChatMessage::where([
             ['sender_id', '=', Auth::user()->id],
             ['receiver_id', '=', $userId]
-        ])
+            ])
             ->orWhere([
                 ['receiver_id', '=', Auth::user()->id],
                 ['sender_id', '=', $userId]
