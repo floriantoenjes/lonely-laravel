@@ -80,7 +80,8 @@
                     }"
                     ref="mainMap"
                 >
-                    <GmapCluster imagePath="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m">
+                    <GmapCluster imagePath="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
+                        @click="resolveCluster">
 
                         <GmapMarker
                             :key="index"
@@ -343,6 +344,9 @@ export default {
                     this.refreshing = false;
                 }, 3000);
             });
+        },
+        resolveCluster(event) {
+            console.log('resolveCluster', event.getMarkers());
         }
     }
 }
