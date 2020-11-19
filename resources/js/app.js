@@ -13,6 +13,7 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {faArrowLeft, faInfoCircle, faSync} from "@fortawesome/free-solid-svg-icons";
 import {faBell, faComments, faFrownOpen} from "@fortawesome/free-regular-svg-icons";
 
+import GoogleMapCluster from 'gmap-vue/dist/components/cluster';
 
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaApp);
@@ -36,6 +37,9 @@ Vue.use(GmapVue, {
    },
     installComponents: true
 });
+
+Vue.component('GmapCluster', GoogleMapCluster);
+
 
 const app = document.getElementById('app');
 

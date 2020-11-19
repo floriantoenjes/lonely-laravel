@@ -80,24 +80,28 @@
                     }"
                     ref="mainMap"
                 >
-                    <GmapMarker
-                        :key="index"
-                        v-for="(m, index) in markers"
-                        :position="m.position"
-                        :clickable="true"
-                        :draggable="false"
-                        @mouseover="showPersonDetails($event, m.user)"
-                    />
+                    <GmapCluster imagePath="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m">
 
-                    <GmapMarker
-                        :key="'a' + index"
-                        v-for="(m, index) in activityMarkers"
-                        :position="m.position"
-                        :clickable="true"
-                        :draggable="false"
-                        :icon="{ url: 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png' }"
-                        @mouseover="showActivityDetails($event, m.activity, m.position)"
-                    />
+                        <GmapMarker
+                            :key="index"
+                            v-for="(m, index) in markers"
+                            :position="m.position"
+                            :clickable="true"
+                            :draggable="false"
+                            @mouseover="showPersonDetails($event, m.user)"
+                        />
+
+                        <GmapMarker
+                            :key="'a' + index"
+                            v-for="(m, index) in activityMarkers"
+                            :position="m.position"
+                            :clickable="true"
+                            :draggable="false"
+                            :icon="{ url: 'http://maps.gstatic.com/mapfiles/markers2/icon_green.png' }"
+                            @mouseover="showActivityDetails($event, m.activity, m.position)"
+                        />
+
+                    </GmapCluster>
 
 
                     <GmapInfoWindow
