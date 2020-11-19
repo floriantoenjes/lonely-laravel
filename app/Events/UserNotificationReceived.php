@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Helpers\UserNotification;
+use App\Models\UserNotification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -28,15 +28,15 @@ class UserNotificationReceived implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param UserNotification $userNotification
+     * @param \App\Models\UserNotification $userNotification
      */
     public function __construct(UserNotification $userNotification)
     {
-        $this->userId = $userNotification->getUserId();
-        $this->type = $userNotification->getType();
-        $this->message = $userNotification->getMessage();
-        $this->senderId = $userNotification->getSenderId();
-        $this->activityId = $userNotification->getActivityId();
+        $this->userId = $userNotification->user_id;
+        $this->type = $userNotification->type;
+        $this->message = $userNotification->message;
+        $this->senderId = $userNotification->sender_id;
+        $this->activityId = $userNotification->activity_id;
     }
 
     /**

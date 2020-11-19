@@ -6,9 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageReceived;
 use App\Events\UserNotificationReceived;
-use App\Helpers\UserNotification;
 use App\Models\ChatMessage;
 use App\Models\User;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -74,13 +74,13 @@ class ChatController extends Controller
         $userNotificationMessage = 'New Chat Message from ' . User::find(Auth::id())->name;
 
         $userNotification = new UserNotification();
-        $userNotification->setUserId($chatMessage->receiver_id)
-            ->setType('chatMessage')
-            ->setMessage($userNotificationMessage)
-            ->setSenderId(Auth::id());
+        $userNotification->user_id = $chatMessage->receiver_id;
+        $userNotification->type = 'chatMessage';
+        $userNotification->message = $userNotificationMessage;
+        $userNotification->sender_id = Auth::id();
 
         event(new UserNotificationReceived($userNotification));
-//        event(new MessageReceived($chatMessage));
+        $userNotification->save();
 
         return Redirect::route('chat', [
             'userId' => $userId

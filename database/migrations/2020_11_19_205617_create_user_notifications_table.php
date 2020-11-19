@@ -20,8 +20,8 @@ class CreateUserNotificationsTable extends Migration
             $table->foreignId('user_id');
             $table->string('type');
             $table->string('message');
-            $table->integer('sender_id');
-            $table->integer('activity_id');
+            $table->integer('sender_id')->nullable();
+            $table->integer('activity_id')->nullable();
         });
     }
 
