@@ -121,7 +121,10 @@
                                 </div>
                             </div>
 
-                            <font-awesome-icon :icon="['far', 'bell']" size="lg"></font-awesome-icon>
+                            <div class="cursor-pointer">
+                                <div class="bg-red-500 text-white rounded-full w-5 h-5 text-center absolute" style="margin-top: -8px; margin-left: 8px" v-if="userNotifications.length > 0">{{ userNotifications.length }}</div>
+                                <font-awesome-icon :icon="['far', 'bell']" size="lg"></font-awesome-icon>
+                            </div>
 
                         </div>
 
@@ -264,6 +267,7 @@
         data() {
             return {
                 showingNavigationDropdown: false,
+                userNotifications: []
             }
         },
 
@@ -290,8 +294,8 @@
         },
 
         mounted() {
-            Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (e) => {
-                alert('User Notification', e);
+            Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (userNotification) => {
+                this.userNotifications.push(userNotification);
             });
         }
     }

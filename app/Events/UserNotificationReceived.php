@@ -11,11 +11,15 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserNotificationReceived
+class UserNotificationReceived implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $userNotification;
+    public $userId;
+
+    public $type;
+
+    public $message;
 
     /**
      * Create a new event instance.
@@ -24,7 +28,9 @@ class UserNotificationReceived
      */
     public function __construct(UserNotification $userNotification)
     {
-        $this->userNotification = $userNotification;
+        $this->userId = $userNotification->getUserId();
+        $this->type = $userNotification->getType();
+        $this->message = $userNotification->getMessage();
     }
 
     /**
@@ -34,6 +40,6 @@ class UserNotificationReceived
      */
     public function broadcastOn()
     {
-        return new Channel('user-notifications.' . $this->userNotification->userId);
+        return new Channel('user-notifications.' . $this->userId);
     }
 }

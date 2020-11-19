@@ -6,11 +6,11 @@ namespace App\Helpers;
 
 class UserNotification
 {
-    public $userId = -1;
+    private $userId = -1;
 
-    public $type = '';
+    private $type = '';
 
-    public $message = '';
+    private $message = '';
 
     /**
      * @return int
