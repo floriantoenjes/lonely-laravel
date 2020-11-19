@@ -121,7 +121,7 @@
                                 </div>
                             </div>
 
-                            <jet-dropdown align="right" width="48">
+                            <jet-dropdown align="right" width="64">
                                 <template #trigger>
                                     <div class="cursor-pointer hover:text-blue-500">
                                         <div class="bg-red-500 text-white rounded-full w-5 h-5 text-center absolute" style="margin-top: -8px; margin-left: 8px" v-if="userNotifications.length > 0">{{ userNotifications.length }}</div>
@@ -129,12 +129,14 @@
                                     </div>
                                 </template>
 
-                                <template #content>
-                                    <div v-for="userNotification in userNotifications" class="p-0.5">
+                                <template #content v-if="userNotifications.length > 0">
+                                    <div v-for="userNotification in userNotifications" class="p-2">
                                         <inertia-link :href="route('chat', { userId: userNotification.senderId })">
-                                            <p class="text-center">{{ userNotification.message }}</p>
+                                            <p>{{ userNotification.message }}</p>
                                         </inertia-link>
+                                        <hr>
                                     </div>
+                                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4" @click="markNotificationsRead">Mark as Read</button>
                                 </template>
                             </jet-dropdown>
 
@@ -265,9 +267,11 @@
     import JetDropdownLink from './../Jetstream/DropdownLink'
     import JetNavLink from './../Jetstream/NavLink'
     import JetResponsiveNavLink from './../Jetstream/ResponsiveNavLink'
+    import Button from "../Jetstream/Button";
 
     export default {
         components: {
+            Button,
             JetApplicationLogo,
             JetApplicationMark,
             JetDropdown,
@@ -297,6 +301,10 @@
                     window.location = '/';
                 })
             },
+            markNotificationsRead() {
+                axios.delete('/user-notifications');
+                this.userNotifications = [];
+            }
         },
 
         computed: {
@@ -307,6 +315,7 @@
 
         mounted() {
             axios.get('/user-notifications').then(response => {
+                console.log(response.data.user);
                 this.userNotifications = response.data.userNotifications;
             });
 

@@ -54,3 +54,4 @@ Route::get('/activity/{activityId}',  [ActivityController::class, 'activityDetai
 Route::post('/activity/{activityId}',  [ActivityController::class, 'sendActivityMessage'])->name('send-activity-message');
 
 Route::get('/user-notifications', [\App\Http\Controllers\UserNotificationController::class, 'getUserNotifications'])->name('user-notifications');
+Route::delete('/user-notifications', [\App\Http\Controllers\UserNotificationController::class, 'markUserNotificationsRead'])->name('mark-user-notifications-read');
