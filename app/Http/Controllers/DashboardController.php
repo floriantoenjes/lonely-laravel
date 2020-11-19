@@ -34,35 +34,28 @@ class DashboardController extends Controller
             $lonely = $this->isLonelyToday($currentUserLonelySettings);
         }
 
-        if ($lonely === true) {
-            $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
-
-            $lonelyPersonIds = [];
-            foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
-                if ($lonelyPersonSetting->user_id === $currentUserLonelySettings->user_id) {
-                    continue;
-                }
-
-                $dist = LonelyHelpers::distFrom($currentUserLonelySettings->latitude, $currentUserLonelySettings->longitude,
-                    $lonelyPersonSetting->latitude, $lonelyPersonSetting->longitude);
-
-                if ($dist > $currentUserLonelySettings->radius) {
-                    continue;
-                }
-
-                $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
-            }
-
-            $lonelyPersons = User::with('userLonelySetting')->whereIn('id', $lonelyPersonIds)->get();
-        } else {
-            $lonelyPersons = [];
-        }
+        $lonelyPersons = $this->getLonelyPeople($lonely, $currentUserLonelySettings);
 
         return Inertia::render('LonelyDashboard', [
             'userLonelySettings' => $currentUserLonelySettings,
             'success' => true,
             'lonely' => $lonely,
             'lonelyPersons' => $lonelyPersons,
+            'activities' => Activity::all()
+        ]);
+    }
+
+    public function refreshDashBoard()
+    {
+        $currentUserLonelySettings = Auth::user()->userLonelySetting()->first();
+
+        $lonely = false;
+        if ($currentUserLonelySettings !== null) {
+            $lonely = $this->isLonelyToday($currentUserLonelySettings);
+        }
+
+        return \Response::json([
+            'lonelyPersons' => $this->getLonelyPeople($lonely, $currentUserLonelySettings),
             'activities' => Activity::all()
         ]);
     }
@@ -140,6 +133,39 @@ class DashboardController extends Controller
 
         $lonelySetting->user_id = Auth::user()->id;
         $lonelySetting->save();
+    }
+
+    /**
+     * @param bool $lonely
+     * @param \Illuminate\Database\Eloquent\Model|null $currentUserLonelySettings
+     * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getLonelyPeople(bool $lonely, ?\Illuminate\Database\Eloquent\Model $currentUserLonelySettings)
+    {
+        if ($lonely === true) {
+            $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
+
+            $lonelyPersonIds = [];
+            foreach ($lonelyPersonSettings as $lonelyPersonSetting) {
+                if ($lonelyPersonSetting->user_id === $currentUserLonelySettings->user_id) {
+                    continue;
+                }
+
+                $dist = LonelyHelpers::distFrom($currentUserLonelySettings->latitude, $currentUserLonelySettings->longitude,
+                    $lonelyPersonSetting->latitude, $lonelyPersonSetting->longitude);
+
+                if ($dist > $currentUserLonelySettings->radius) {
+                    continue;
+                }
+
+                $lonelyPersonIds[] = $lonelyPersonSetting->user_id;
+            }
+
+            $lonelyPersons = User::with('userLonelySetting')->whereIn('id', $lonelyPersonIds)->get();
+        } else {
+            $lonelyPersons = [];
+        }
+        return $lonelyPersons;
     }
 
 }

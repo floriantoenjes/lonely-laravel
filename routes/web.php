@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 //});
 
 Route::get('/lonely-dashboard', [DashboardController::class, 'lonelyDashBoard'])->name('lonely-dashboard');
+Route::get('/lonely-dashboard/refresh', [DashboardController::class, 'refreshDashBoard'])->name('refresh-dashboard');
 Route::post('/lonely-dashboard', [DashboardController::class, 'setLonelySettings']);
 Route::post('/lonely-no-more', [DashboardController::class, 'notLonelyAnymore'])->name('lonely-no-more');
 

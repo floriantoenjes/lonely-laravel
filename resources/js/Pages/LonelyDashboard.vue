@@ -53,6 +53,12 @@
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
                             :disabled="loading" :class="{ 'opacity-50 cursor-not-allowed': loading }">I am not lonely anymore!
                     </button>
+
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-8"
+                            @click="refreshDashBoard">
+                        Refresh
+                        <font-awesome-icon icon="sync" class="ml-4" size="lg" :spin="refreshing"></font-awesome-icon>
+                    </button>
                 </form>
             </div>
 
@@ -215,7 +221,9 @@ export default {
                         height: -40
                     }
                 }
-            }
+            },
+
+            refreshing: false
         }
     },
     computed: {
@@ -318,6 +326,20 @@ export default {
                 }
             });
         },
+        refreshDashBoard() {
+            this.refreshing = true;
+            axios.get('/lonely-dashboard/refresh').then(response => {
+                this.lonelyPersons = response.data.lonelyPersons;
+                this.activities = response.data.activities;
+
+                this.generateMarkers();
+                this.generateActivityMarkers();
+
+                setTimeout(() => {
+                    this.refreshing = false;
+                }, 3000);
+            });
+        }
     }
 }
 </script>
