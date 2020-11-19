@@ -48,7 +48,7 @@
                         <h3 class="text-2xl mb-4 mr-8">{{ receiver.name }}</h3>
                     </div>
                     <div class="mb-16">
-                        <button type="button" class="bg-yellow-300 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded mr-4">Ignore User</button>
+                        <button type="button" class="bg-yellow-300 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded mr-4">Ignore User</button>
                         <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Report User</button>
                     </div>
 
