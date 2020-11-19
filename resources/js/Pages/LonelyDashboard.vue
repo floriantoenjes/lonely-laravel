@@ -76,12 +76,18 @@
                     v-if="lonely"
                     :options="{
                         mapTypeControl: false,
-                        streetViewControl: false
+                        streetViewControl: false,
+                        styles: [{
+                            featureType: 'poi',
+                            stylers: [{
+                                visibility: 'off'
+                            }]
+                        }]
                     }"
                     ref="mainMap"
                 >
                     <GmapCluster imagePath="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-                        @click="resolveCluster">
+                        :zoomOnClick="true" :maxZoom="17">
 
                         <GmapMarker
                             :key="index"
@@ -215,6 +221,7 @@ export default {
             }),
 
             mapCenter: { lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude },
+            zoomLevel: 0,
             markers: [],
             activityMarkers: [],
 
@@ -233,11 +240,10 @@ export default {
     },
     computed: {
         google: gmapApi,
-        zoomLevel: function () {
-            return parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius));
-        }
     },
     mounted() {
+        this.zoomLevel = parseInt(Math.log2(156543.03392 * Math.cos(this.userLonelySettings.latitude * Math.PI / 180) / this.userLonelySettings.radius));
+
         Inertia.on('start', event => {
             this.loading = true;
         });
@@ -346,7 +352,8 @@ export default {
             });
         },
         resolveCluster(event) {
-            console.log('resolveCluster', event.getMarkers());
+            // this.$refs.mainMap.panTo(event.getMarkers()[0].position);
+            // this.$refs.mainMap.fitBounds(event.getBounds());
         }
     }
 }
