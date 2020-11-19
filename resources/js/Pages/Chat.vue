@@ -13,8 +13,8 @@
 
         <div>
             <div class="flex flex-row">
-                <div class="bg-white m-4 p-16 overflow-scroll w-2/3" style="height: 75vh">
-                    <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll">
+                <div class="bg-white m-4 p-16 overflow-scroll w-2/3" style="height: 75vh" @scroll="messageScroll">
+                    <div v-for="chatMessage in chatMessages" class="messages-div mb-4 overflow-scroll" ref="chatMessage">
                         <div class="flex flex-row">
                             <div style="min-width: 5em; max-width: 5em">
                                 <img class="h-16 rounded block mb-4 block m-auto"
@@ -40,7 +40,8 @@
                         <h2 class="text-2xl text-center self-center">Select a Contact!</h2>
                     </div>
 
-                    <button type="button" class="sticky bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="bottom: -1rem; left: 98%" @click="scrollToLastMessage">
+                    <button type="button" class="sticky bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="bottom: -1rem; left: 98%" @click="scrollToLastMessage"
+                        v-if="showScrollCue">
                         <font-awesome-icon icon="angle-down" size="lg"></font-awesome-icon>
                     </button>
                 </div>
@@ -107,6 +108,7 @@ export default {
             form: this.$inertia.form({
                 chatMessageInput: ''
             }),
+            showScrollCue: false
         }
     },
     mounted() {
@@ -141,6 +143,9 @@ export default {
         },
         formatTime(createdAt) {
             return moment(createdAt).format('LTS');
+        },
+        messageScroll(event) {
+            this.showScrollCue = event.srcElement.scrollTop < this.$refs.chatMessage[0].clientHeight * this.$refs.chatMessage.length;
         }
     }
 }
