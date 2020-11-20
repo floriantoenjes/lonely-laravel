@@ -226,6 +226,9 @@ export default {
             markers: [],
             activityMarkers: [],
 
+            markersMoved: false,
+            movedMarkers: [],
+
             infoWindow: {
                 openedId: -1,
                 options: {
@@ -237,8 +240,6 @@ export default {
             },
 
             refreshing: false,
-
-            markersMoved: false
         }
     },
     computed: {
@@ -262,6 +263,21 @@ export default {
 
         this.generateMarkers();
         this.generateActivityMarkers();
+
+        setTimeout(() => {
+            this.$refs.mainMap.$mapObject.addListener("zoom_changed", () => {
+                this.infoWindow.openedId = null;
+                if (this.movedMarkers.length > 0) {
+                    for (const movedMarker of this.movedMarkers) {
+                        movedMarker.line.setMap(null);
+                        movedMarker.position = movedMarker.oldPosition;
+                        this.markersMoved = false;
+                    }
+                }
+            });
+        }, 1000);
+
+
     },
     methods: {
         updateLonelySettings() {
@@ -309,7 +325,11 @@ export default {
 
             if (!this.markersMoved) {
                 for (let i = 0; i < this.activityMarkers.length; i++) {
-                    if (this.activityMarkers[i].position.lat() === position.lat() && this.activityMarkers[i].position.lng() === position.lng()) {
+                    if (
+                        this.activityMarkers[i].activity.id !== activity.id &&
+                        this.activityMarkers[i].position.lat() === position.lat() &&
+                        this.activityMarkers[i].position.lng() === position.lng()) {
+
                         var theta = 2.39998131 * i;
                         var radius = 2.5 * Math.sqrt(theta);
                         var x = Math.cos(theta) * radius;
@@ -321,7 +341,7 @@ export default {
                         newLng += 0.00005 * y;
                         this.activityMarkers[i].position = new google.maps.LatLng({ lat: newLat, lng: newLng})
 
-                        new google.maps.Polyline({
+                        const line = new google.maps.Polyline({
                             path: [
                                 new google.maps.LatLng(position.lat(), position.lng()),
                                 new google.maps.LatLng(newLat, newLng)
@@ -331,6 +351,10 @@ export default {
                             strokeWeight: 2,
                             map: this.$refs.mainMap.$mapObject
                         });
+
+                        this.activityMarkers[i].oldPosition = position;
+                        this.activityMarkers[i].line = line;
+                        this.movedMarkers.push(this.activityMarkers[i]);
 
                         this.markersMoved = true;
                     }
