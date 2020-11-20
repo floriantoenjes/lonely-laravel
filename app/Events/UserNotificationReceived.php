@@ -15,6 +15,8 @@ class UserNotificationReceived implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $id;
+
     public $userId;
 
     public $type;
@@ -32,6 +34,7 @@ class UserNotificationReceived implements ShouldBroadcast
      */
     public function __construct(UserNotification $userNotification)
     {
+        $this->id = $userNotification->id;
         $this->userId = $userNotification->user_id;
         $this->type = $userNotification->type;
         $this->message = $userNotification->message;

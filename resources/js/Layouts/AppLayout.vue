@@ -129,7 +129,7 @@
                                     </div>
                                 </template>
 
-                                <template #content v-if="userNotifications.length > 0">
+                                <template #content>
                                     <div v-for="userNotification in userNotifications" class="p-2">
                                         <inertia-link v-if="!userNotification.activity_id" :href="route('chat', { userId: userNotification.sender_id })">
                                             <p>{{ userNotification.message }}</p>
@@ -140,7 +140,11 @@
                                         </inertia-link>
                                         <hr>
                                     </div>
-                                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4" @click="markNotificationsRead">Mark as Read</button>
+                                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full mt-4" @click="markNotificationsRead" v-if="userNotifications.length > 0">Mark as Read</button>
+
+                                    <div v-if="userNotifications.length === 0" class="p-2">
+                                        <p>No notifications</p>
+                                    </div>
                                 </template>
                             </jet-dropdown>
 
@@ -308,6 +312,9 @@
             markNotificationsRead() {
                 axios.delete('/user-notifications');
                 this.userNotifications = [];
+            },
+            markOneNotificationRead(userNotification) {
+                axios.delete(`/user-notifications/${userNotification.id}`);
             }
         },
 
@@ -324,9 +331,11 @@
             });
 
             Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (userNotification) => {
-                if (userNotification.senderId !== this.$page.user.id) {
-                    this.userNotifications.push(userNotification);
-                }
+                this.markOneNotificationRead(userNotification);
+
+                // if (userNotification.senderId !== this.$page.user.id) {
+                //     this.userNotifications.push(userNotification);
+                // }
             });
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\UserNotification;
+use Illuminate\Http\Request;
 
 class UserNotificationController extends Controller
 {
@@ -23,6 +24,13 @@ class UserNotificationController extends Controller
     public function markUserNotificationsRead()
     {
         UserNotification::where('user_id', '=', \Auth::id())->delete();
+
+        return \Response::noContent();
+    }
+
+    public function markOneUserNotificationsRead($userNotificationId)
+    {
+        UserNotification::where('id', '=', $userNotificationId)->delete();
 
         return \Response::noContent();
     }

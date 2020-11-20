@@ -346,7 +346,7 @@ export default {
                                 new google.maps.LatLng(position.lat(), position.lng()),
                                 new google.maps.LatLng(newLat, newLng)
                             ],
-                            strokeColor: "#FF0000",
+                            strokeColor: "#000000",
                             strokeOpacity: 1.0,
                             strokeWeight: 2,
                             map: this.$refs.mainMap.$mapObject
