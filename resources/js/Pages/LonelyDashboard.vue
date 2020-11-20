@@ -82,7 +82,8 @@
                             stylers: [{
                                 visibility: 'off'
                             }]
-                        }]
+                        }],
+                        maxZoom: 18
                     }"
                     ref="mainMap"
                 >
@@ -308,19 +309,33 @@ export default {
             let newLng = position.lng();
 
             if (!this.markersMoved) {
-                for (const marker of this.activityMarkers) {
-                    if (!skippedFirst) {
-                        skippedFirst = true;
-                        continue;
-                    }
+                // for (const marker of this.activityMarkers) {
+                //     if (!skippedFirst) {
+                //         skippedFirst = true;
+                //         continue;
+                //     }
+                //
+                //     console.log(marker);
+                //     if (marker.position.lat() === position.lat() && marker.position.lng() === position.lng()) {
+                //         marker.position = new google.maps.LatLng({ lat: newLat + 0.0001, lng: newLng})
+                //         newLat += 0.0001;
+                //         newLng += 0.0001;
+                //     }
+                // }
 
-                    console.log(marker);
-                    if (marker.position.lat() === position.lat() && marker.position.lng() === position.lng()) {
-                        marker.position = new google.maps.LatLng({ lat: newLat + 0.0001, lng: newLng})
-                        newLat += 0.0001;
-                        newLng += 0.0001;
-                    }
+                for (let i = 0; i < this.activityMarkers.length; i++) {
+                    var theta = 2.39998131 * i;
+                    var radius = 2.5 * Math.sqrt(theta);
+                    var x = Math.cos(theta) * radius;
+                    var y = Math.sin(theta) * radius;
+
+                    console.log(x, y);
+
+                    newLat += 0.00005 * x;
+                    newLng += 0.00005 * y;
+                    this.activityMarkers[i].position = new google.maps.LatLng({ lat: newLat, lng: newLng})
                 }
+
                 this.markersMoved = true;
             }
 
