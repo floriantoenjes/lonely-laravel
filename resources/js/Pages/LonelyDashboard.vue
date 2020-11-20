@@ -304,7 +304,6 @@ export default {
         },
         showActivityDetails($event, activity, position) {
 
-            let skippedFirst = false;
             let newLat = position.lat();
             let newLng = position.lng();
 
@@ -321,10 +320,21 @@ export default {
                         newLat += 0.00005 * x;
                         newLng += 0.00005 * y;
                         this.activityMarkers[i].position = new google.maps.LatLng({ lat: newLat, lng: newLng})
+
+                        new google.maps.Polyline({
+                            path: [
+                                new google.maps.LatLng(position.lat(), position.lng()),
+                                new google.maps.LatLng(newLat, newLng)
+                            ],
+                            strokeColor: "#FF0000",
+                            strokeOpacity: 1.0,
+                            strokeWeight: 2,
+                            map: this.$refs.mainMap.$mapObject
+                        });
+
+                        this.markersMoved = true;
                     }
                 }
-
-                this.markersMoved = true;
             }
 
 
