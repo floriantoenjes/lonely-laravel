@@ -87,7 +87,7 @@
                     ref="mainMap"
                 >
                     <GmapCluster imagePath="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-                        :zoomOnClick="true" :maxZoom="17">
+                        :zoomOnClick="true" :maxZoom="17" @click="resolveCluster">
 
                         <GmapMarker
                             :key="index"
@@ -235,7 +235,9 @@ export default {
                 }
             },
 
-            refreshing: false
+            refreshing: false,
+
+            markersMoved: false
         }
     },
     computed: {
@@ -299,7 +301,30 @@ export default {
                 this.$inertia.get(`/chat/${userId}`, { prevRoute: 'lonely-dashboard'});
             }
         },
-        showActivityDetails($event, activity) {
+        showActivityDetails($event, activity, position) {
+
+            let skippedFirst = false;
+            let newLat = position.lat();
+            let newLng = position.lng();
+
+            if (!this.markersMoved) {
+                for (const marker of this.activityMarkers) {
+                    if (!skippedFirst) {
+                        skippedFirst = true;
+                        continue;
+                    }
+
+                    console.log(marker);
+                    if (marker.position.lat() === position.lat() && marker.position.lng() === position.lng()) {
+                        marker.position = new google.maps.LatLng({ lat: newLat + 0.0001, lng: newLng})
+                        newLat += 0.0001;
+                        newLng += 0.0001;
+                    }
+                }
+                this.markersMoved = true;
+            }
+
+
             this.infoWindow.openedId = 'a' + activity.id;
         },
         openActivity(id) {
@@ -356,6 +381,13 @@ export default {
         resolveCluster(event) {
             // this.$refs.mainMap.panTo(event.getMarkers()[0].position);
             // this.$refs.mainMap.fitBounds(event.getBounds());
+
+            setTimeout(() => {
+                const map = this.$refs.mainMap.$mapObject;
+                if (map.getZoom() > 21) {
+                    map.setZoom(map.getZoom() - 4);
+                }
+            }, 1000);
         }
     }
 }
