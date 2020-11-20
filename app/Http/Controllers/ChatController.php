@@ -71,16 +71,22 @@ class ChatController extends Controller
 
         $chatMessage->save();
 
-        $userNotificationMessage = 'Chat Message from ' . User::find(Auth::id())->name;
+        $existingNotifications = UserNotification::where('user_id', '=', $chatMessage->receiver_id)
+            ->where('sender_id', '=', Auth::id())->get();
 
-        $userNotification = new UserNotification();
-        $userNotification->user_id = $chatMessage->receiver_id;
-        $userNotification->type = 'chatMessage';
-        $userNotification->message = $userNotificationMessage;
-        $userNotification->sender_id = Auth::id();
+        if (count($existingNotifications) === 0)
+        {
+            $userNotificationMessage = 'Chat Message from ' . User::find(Auth::id())->name;
 
-        event(new UserNotificationReceived($userNotification));
-        $userNotification->save();
+            $userNotification = new UserNotification();
+            $userNotification->user_id = $chatMessage->receiver_id;
+            $userNotification->type = 'chatMessage';
+            $userNotification->message = $userNotificationMessage;
+            $userNotification->sender_id = Auth::id();
+
+            event(new UserNotificationReceived($userNotification));
+            $userNotification->save();
+        }
 
         event(new MessageReceived($chatMessage));
 

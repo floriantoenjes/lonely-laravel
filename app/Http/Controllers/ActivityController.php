@@ -111,19 +111,27 @@ class ActivityController extends Controller
 
         $activityMessageWithSender = ActivityMessage::with('sender')->find($activityMessage->id);
 
+
         $activity = Activity::find($activityId);
         $userNotificationMessage = 'Chat Message in ' . $activity->name;
 
         foreach ($activity->users as $user) {
-            $userNotification = new UserNotification();
-            $userNotification->user_id = $user->id;
-            $userNotification->sender_id = Auth::id();
-            $userNotification->activity_id = $activityId;
-            $userNotification->message = $userNotificationMessage;
-            $userNotification->type = 'activityMessage';
 
-            event(new UserNotificationReceived($userNotification));
-            $userNotification->save();
+            $existingNotifications = UserNotification::where('user_id', '=', $user->id)
+                ->where('activity_id', '=', $activityId)->get();
+
+            if (count($existingNotifications) === 0) {
+
+                $userNotification = new UserNotification();
+                $userNotification->user_id = $user->id;
+                $userNotification->sender_id = Auth::id();
+                $userNotification->activity_id = $activityId;
+                $userNotification->message = $userNotificationMessage;
+                $userNotification->type = 'activityMessage';
+
+                event(new UserNotificationReceived($userNotification));
+                $userNotification->save();
+            }
         }
 
         event(new ActivityMessageReceived($activityMessageWithSender));
