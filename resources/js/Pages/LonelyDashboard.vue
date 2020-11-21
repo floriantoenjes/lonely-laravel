@@ -264,8 +264,8 @@ export default {
         this.generateMarkers();
         this.generateActivityMarkers();
 
-        setTimeout(() => {
-            this.$refs.mainMap.$mapObject.addListener("zoom_changed", () => {
+        this.$gmapApiPromiseLazy().then(() => {
+            this.$refs.mainMap.$mapObject.addListener("bounds_changed", () => {
                 this.infoWindow.openedId = null;
                 if (this.movedMarkers.length > 0) {
                     for (const movedMarker of this.movedMarkers) {
@@ -275,8 +275,7 @@ export default {
                     }
                 }
             });
-        }, 1000);
-
+        });
 
     },
     methods: {
@@ -361,8 +360,8 @@ export default {
                 }
             }
 
-
             this.infoWindow.openedId = 'a' + activity.id;
+
         },
         openActivity(id) {
             this.$inertia.get(`activity/${id}`, { prevRoute: 'lonely-dashboard'});
@@ -419,12 +418,12 @@ export default {
             // this.$refs.mainMap.panTo(event.getMarkers()[0].position);
             // this.$refs.mainMap.fitBounds(event.getBounds());
 
-            setTimeout(() => {
+            this.$gmapApiPromiseLazy().then(() => {
                 const map = this.$refs.mainMap.$mapObject;
                 if (map.getZoom() > 21) {
                     map.setZoom(map.getZoom() - 4);
                 }
-            }, 1000);
+            });
         }
     }
 }
