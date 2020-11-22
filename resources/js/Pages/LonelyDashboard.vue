@@ -219,7 +219,13 @@ export default {
                 address: this.userLonelySettings?.address,
                 radius: this.userLonelySettings?.radius,
                 ageFrom: this.userLonelySettings?.meet_up_age_from,
-                ageTo: this.userLonelySettings?.meet_up_age_to
+                ageTo: this.userLonelySettings?.meet_up_age_to,
+
+                street_number: '',
+                route: '',
+                locality: '',
+                postal_code: '',
+
             }, {
                 resetOnSuccess: false
             }),
@@ -243,6 +249,8 @@ export default {
             },
 
             refreshing: false,
+
+            autocomplete: null,
         }
     },
     computed: {
@@ -274,7 +282,22 @@ export default {
 
             console.log(this.$refs.placesAutocomplete);
 
-            new google.maps.places.Autocomplete(this.$refs.placesAutocomplete);
+            this.autocomplete = new google.maps.places.Autocomplete(this.$refs.placesAutocomplete);
+            this.autocomplete.setFields(["address_component"]);
+            this.autocomplete.addListener('place_changed', () => {
+                const place = this.autocomplete.getPlace();
+                console.log(place);
+
+                for (const component of place.address_components) {
+                    const addressType = component.types[0];
+
+                    console.log(this.form, addressType);
+
+                    if (this.form[addressType] !== undefined) {
+                        this.form[addressType] = component.long_name;
+                    }
+                }
+            })
         });
     },
     methods: {
