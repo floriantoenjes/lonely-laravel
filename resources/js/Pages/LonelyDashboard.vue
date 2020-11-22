@@ -9,6 +9,9 @@
         <div class="flex flex-row h-full">
             <div class="m-4 p-16 w-1/4 bg-white">
                 <form class="flex flex-col" @submit.prevent="updateLonelySettings" id="lonelySettings">
+                    <label for="placesAutocomplete">Places API</label>
+                    <input id="placesAutocomplete" type="text" ref="placesAutocomplete" class="border rounded w-full"></input>
+
                     <div class="mb-4">
                         <label for="city" class="block mr-4 mb-4">City:</label>
                         <input id="city" class="border rounded w-full" type="text" placeholder=" City" v-model="form.city">
@@ -265,18 +268,14 @@ export default {
         this.generateActivityMarkers();
 
         this.$gmapApiPromiseLazy().then(() => {
-            this.$refs.mainMap.$mapObject.addListener("bounds_changed", () => {
-                this.infoWindow.openedId = null;
-                if (this.movedMarkers.length > 0) {
-                    for (const movedMarker of this.movedMarkers) {
-                        movedMarker.line.setMap(null);
-                        movedMarker.position = movedMarker.oldPosition;
-                        this.markersMoved = false;
-                    }
-                }
-            });
-        });
+            if (this.lonely) {
+                this.listenOnBoundsChanged();
+            }
 
+            console.log(this.$refs.placesAutocomplete);
+
+            new google.maps.places.Autocomplete(this.$refs.placesAutocomplete);
+        });
     },
     methods: {
         updateLonelySettings() {
@@ -286,6 +285,9 @@ export default {
                     this.generateActivityMarkers();
                 });
                 this.disableSettingsForm();
+                setTimeout(() => {
+                    this.listenOnBoundsChanged();
+                }, 1000);
             } else if (this.lonely) {
                 this.form.post(route('lonely-no-more'));
                 this.enableSettingsForm();
@@ -422,6 +424,18 @@ export default {
                 const map = this.$refs.mainMap.$mapObject;
                 if (map.getZoom() > 21) {
                     map.setZoom(map.getZoom() - 4);
+                }
+            });
+        },
+        listenOnBoundsChanged() {
+            this.$refs.mainMap.$mapObject.addListener("bounds_changed", () => {
+                this.infoWindow.openedId = null;
+                if (this.movedMarkers.length > 0) {
+                    for (const movedMarker of this.movedMarkers) {
+                        movedMarker.line.setMap(null);
+                        movedMarker.position = movedMarker.oldPosition;
+                        this.markersMoved = false;
+                    }
                 }
             });
         }

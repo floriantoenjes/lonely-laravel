@@ -34,7 +34,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(GmapVue, {
    load: {
-       key: process.env.MIX_GEOCODE_API_KEY
+       key: process.env.MIX_GEOCODE_API_KEY,
+       libraries: 'places'
    },
     installComponents: true
 });
