@@ -165,11 +165,14 @@ export default {
     props: {
         'lonely': {},
         'userLonelySettings': {},
-        'lonelyPersons': {},
-        'activities': {}
+        'lonelyPersonsProp': {},
+        'activitiesProp': {}
     },
     data() {
         return {
+            lonelyPersons: this.lonelyPersonsProp,
+            activities: this.activitiesProp,
+
             loading: false,
 
             mapCenter: { lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude },

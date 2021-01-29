@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\UserLonelySetting;
 use DateTime;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,8 +43,8 @@ class DashboardController extends Controller
             'userLonelySettings' => $currentUserLonelySettings,
             'success' => true,
             'lonely' => $lonely,
-            'lonelyPersons' => $lonelyPersons,
-            'activities' => Activity::all()
+            'lonelyPersonsProp' => $lonelyPersons,
+            'activitiesProp' => Activity::all()
         ]);
     }
 
@@ -139,7 +141,7 @@ class DashboardController extends Controller
     /**
      * @param bool $lonely
      * @param Model|null $currentUserLonelySettings
-     * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return array|Builder[]|Collection
      */
     public function getLonelyPeople(bool $lonely, ?Model $currentUserLonelySettings)
     {
