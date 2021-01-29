@@ -15,6 +15,7 @@ import {faBell, faComments, faFrownOpen} from "@fortawesome/free-regular-svg-ico
 
 import GoogleMapCluster from 'gmap-vue/dist/components/cluster';
 import LonelySettingsForm from "./Components/LonelySettingsForm";
+import LonelyMap from "./Components/LonelyMap";
 
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaApp);
@@ -33,6 +34,7 @@ library.add(
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('lonely-settings-form', LonelySettingsForm);
+Vue.component('lonely-map', LonelyMap);
 
 Vue.use(GmapVue, {
    load: {
@@ -44,6 +46,7 @@ Vue.use(GmapVue, {
 
 Vue.component('GmapCluster', GoogleMapCluster);
 
+export const bus = new Vue();
 
 const app = document.getElementById('app');
 
