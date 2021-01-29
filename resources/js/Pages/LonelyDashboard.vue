@@ -72,17 +72,11 @@ export default {
     },
     data() {
         return {
-            lonelyPersons: this.lonelyPersonsProp,
-            activities: this.activitiesProp,
-
             loading: false,
-
-            mapCenter: { lat: +this.userLonelySettings.latitude, lng: +this.userLonelySettings.longitude },
-            zoomLevel: 0,
-
             refreshing: false,
 
-            autocomplete: null,
+            lonelyPersons: this.lonelyPersonsProp,
+            activities: this.activitiesProp,
         }
     },
     computed: {
