@@ -326,7 +326,6 @@
 
         mounted() {
             axios.get('/user-notifications').then(response => {
-                console.log(response.data.user);
                 this.userNotifications = response.data.userNotifications;
             });
 
