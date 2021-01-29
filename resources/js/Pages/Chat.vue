@@ -87,11 +87,13 @@ import Label from "../Jetstream/Label";
 import AppLayout from "../Layouts/AppLayout";
 import PrevRouteCapability from "../Mixins/PrevRouteCapability";
 import Button from "../Jetstream/Button";
+import ChatFunctions from "../Mixins/ChatFunctions";
 
 export default {
     name: "Chat",
     components: {Button, AppLayout, Label},
     mixins: [
+        ChatFunctions,
         PrevRouteCapability
     ],
     props: {
@@ -133,18 +135,6 @@ export default {
                     this.scrollToLastMessage();
                 }
             });
-        },
-        scrollToLastMessage() {
-            const messagesDivs = this.$el.getElementsByClassName('messages-div');
-            const el = messagesDivs[messagesDivs.length - 1];
-            if (el !== undefined) {
-                setTimeout(function () {
-                    el.scrollIntoView();
-                });
-            }
-        },
-        formatTime(createdAt) {
-            return moment(createdAt).format('LTS');
         },
         messageScroll(event) {
             this.showScrollCue = event.srcElement.scrollTop + 300 < this.$refs.chatMessage[0].clientHeight * (this.$refs.chatMessage.length - 1);

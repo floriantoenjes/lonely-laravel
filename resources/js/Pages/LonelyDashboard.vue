@@ -348,7 +348,6 @@ export default {
             const elements = form.elements;
             for (const element of elements) {
                 if (element.tagName.toLowerCase() !== 'button') {
-                    console.log(element);
                     element.readOnly = true;
                     element.disabled = 'disabled';
                 }
