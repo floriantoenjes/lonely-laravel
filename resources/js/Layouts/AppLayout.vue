@@ -333,9 +333,9 @@
             Echo.channel(`user-notifications.${this.$page.user.id}`).listen('UserNotificationReceived', (userNotification) => {
                 this.markOneNotificationRead(userNotification);
 
-                // if (userNotification.senderId !== this.$page.user.id) {
-                //     this.userNotifications.push(userNotification);
-                // }
+                if (userNotification.senderId !== this.$page.user.id) {
+                    this.userNotifications.push(userNotification);
+                }
             });
         }
     }

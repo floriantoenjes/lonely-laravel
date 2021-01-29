@@ -9,8 +9,10 @@
         <div class="flex flex-row h-full">
             <div class="m-4 p-16 w-1/4 bg-white">
                 <form class="flex flex-col" @submit.prevent="updateLonelySettings" id="lonelySettings">
-                    <label for="placesAutocomplete">Places API</label>
-                    <input id="placesAutocomplete" type="text" ref="placesAutocomplete" class="border rounded w-full"></input>
+                    <div class="mb-4">
+                        <label for="placesAutocomplete" class="block mr-4 mb-4">Your Location:</label>
+                        <input id="placesAutocomplete" type="text" ref="placesAutocomplete" class="border rounded w-full"></input>
+                    </div>
 
                     <div class="mb-4">
                         <label for="city" class="block mr-4 mb-4">City:</label>
@@ -86,7 +88,7 @@
                                 visibility: 'off'
                             }]
                         }],
-                        maxZoom: 18
+                        maxZoom: 18,
                     }"
                     ref="mainMap"
                 >
@@ -217,6 +219,7 @@ export default {
                 city: this.userLonelySettings?.city,
                 postcode: this.userLonelySettings?.postcode,
                 address: this.userLonelySettings?.address,
+
                 radius: this.userLonelySettings?.radius,
                 ageFrom: this.userLonelySettings?.meet_up_age_from,
                 ageTo: this.userLonelySettings?.meet_up_age_to,
@@ -288,15 +291,29 @@ export default {
                 const place = this.autocomplete.getPlace();
                 console.log(place);
 
+                let street_number = '';
+                let route = '';
                 for (const component of place.address_components) {
                     const addressType = component.types[0];
 
                     console.log(this.form, addressType);
 
-                    if (this.form[addressType] !== undefined) {
-                        this.form[addressType] = component.long_name;
+                    switch (addressType) {
+                        case 'street_number':
+                            street_number = component.long_name;
+                            break;
+                        case 'route':
+                            route = component.long_name;
+                            break;
+                        case 'locality':
+                            this.form.city = component.long_name;
+                            break;
+                        case 'postal_code':
+                            this.form.postcode = component.long_name;
+                            break;
                     }
                 }
+                this.form.address = `${route} ${street_number}`;
             })
         });
     },
@@ -320,14 +337,21 @@ export default {
             const form = document.getElementById('lonelySettings');
             const elements = form.elements;
             for (const element of elements) {
-                element.readOnly = false;
+                if (element.tagName.toLowerCase() !== 'button') {
+                    element.readOnly = false;
+                    element.disabled = '';
+                }
             }
         },
         disableSettingsForm() {
             const form = document.getElementById('lonelySettings');
             const elements = form.elements;
             for (const element of elements) {
-                element.readOnly = true;
+                if (element.tagName.toLowerCase() !== 'button') {
+                    console.log(element);
+                    element.readOnly = true;
+                    element.disabled = 'disabled';
+                }
             }
         },
         showPersonDetails(event, user) {

@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserLonelySetting;
 use DateTime;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -111,9 +112,9 @@ class DashboardController extends Controller
 
     /**
      * @param array $coordinates
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      */
-    function createOrUpdateLonelySetting(array $coordinates, \Illuminate\Http\Request $request): void
+    function createOrUpdateLonelySetting(array $coordinates, Request $request): void
     {
         $lonelySetting = Auth::user()->userLonelySetting()->firstOr(['*'], function () {
             return new UserLonelySetting();
@@ -137,10 +138,10 @@ class DashboardController extends Controller
 
     /**
      * @param bool $lonely
-     * @param \Illuminate\Database\Eloquent\Model|null $currentUserLonelySettings
+     * @param Model|null $currentUserLonelySettings
      * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function getLonelyPeople(bool $lonely, ?\Illuminate\Database\Eloquent\Model $currentUserLonelySettings)
+    public function getLonelyPeople(bool $lonely, ?Model $currentUserLonelySettings)
     {
         if ($lonely === true) {
             $lonelyPersonSettings = UserLonelySetting::where(DB::raw('DATE(lonely_since)'), '=', DB::raw('CURDATE()'))->get();
