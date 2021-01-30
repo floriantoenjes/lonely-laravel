@@ -28,10 +28,15 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         return DB::transaction(function () use ($input) {
+            $birthdate = \DateTime::createFromFormat('d/m/Y', $input['birthdate']);
+            $birthdate = $birthdate->format('Y-m-d');
+
             return tap(User::create([
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
+                'sex' => $input['sex'],
+                'birthdate' => $birthdate
             ]), function (User $user) {
                 $this->createTeam($user);
             });
